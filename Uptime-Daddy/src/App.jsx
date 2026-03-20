@@ -1,34 +1,30 @@
 import "./App.css";
+import { useState } from "react";
+import { Container, Button } from "semantic-ui-react";
 import Navbar from "./molecules/navbar/navbar";
+import Table from "./molecules/table/table";
+import Cards from "./atoms/cards/cards";
+import Register from "./molecules/register/register";
 
 function App() {
-  return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 max-w-7xl mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-            <p className="text-xs text-slate-500 dark:text-slate-400">Monitorede Websites</p>
-            <p className="text-3xl font-semibold text-slate-800 dark:text-white mt-2">0</p>
-          </div>
+	const [showRegister, setShowRegister] = useState(false);
 
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-            <p className="text-xs text-slate-500 dark:text-slate-400">Nede websites</p>
-            <p className="text-3xl font-semibold text-slate-800 dark:text-white mt-2">37</p>
-          </div>
+	if (showRegister) {
+		return <Register onSwitchToDashboard={() => setShowRegister(false)} />;
+	}
 
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-            <p className="text-xs text-slate-500 dark:text-slate-400">Pending Deliverables</p>
-            <p className="text-3xl font-semibold text-slate-800 dark:text-white mt-2">8</p>
-          </div>
-        </div>
-        <div className="mt-6 flex justify-between items-center text-sm text-slate-400">
-          <span id="resultText"></span>
-        </div>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<Navbar />
+			<Container style={{ marginTop: "7rem", padding: "2rem 0" }}>
+				<Button primary onClick={() => setShowRegister(true)} style={{ marginBottom: "1.25rem" }}>
+					Open Register Page
+				</Button>
+				<Cards />
+				<Table />
+			</Container>
+		</>
+	);
 }
-
 
 export default App;

@@ -1,15 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import 'semantic-ui-css/semantic.min.css'
 import './index.css'
 import App from './App.jsx'
+import Router from './routes/index.jsx'
 
-const savedTheme = localStorage.getItem('theme')
-const defaultDark = savedTheme ? savedTheme === 'dark' : true
-document.documentElement.classList.toggle('dark', defaultDark)
-document.body.classList.toggle('dark', defaultDark)
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <Router />
   </StrictMode>
 );

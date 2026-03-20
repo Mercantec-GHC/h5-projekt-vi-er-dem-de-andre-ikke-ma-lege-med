@@ -1,15 +1,14 @@
-@import "tailwindcss";
+/* Semantic UI styles are imported in main.jsx */
 
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
   background: #f8fafc;
-  color: #0f172a;
+  color: #091413;
 }
 
-.dark body {
-  background: #020617;
-  color: #e2e8f0;
+*,:before,:after {
+  box-sizing: border-box;
 }
 
 *:focus-visible {
