@@ -1,0 +1,3 @@
+class HttpRequester
+  
+end
