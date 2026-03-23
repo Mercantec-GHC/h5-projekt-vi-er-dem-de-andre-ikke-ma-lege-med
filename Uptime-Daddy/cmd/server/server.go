@@ -6,8 +6,9 @@ import (
 	"os"
 
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/db"
+	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/handler"
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/models"
-	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/service"
+	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/routes"
 	"github.com/joho/godotenv"
 )
 
@@ -15,6 +16,7 @@ func main() {
 	if err := godotenv.Load(".env"); err != nil {
 		log.Fatal("Error loading .env file:", err)
 	}
+
 	port := os.Getenv("PORT")
 
 	if err := db.Connect(); err != nil {
@@ -26,7 +28,10 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/accounts", service.CreateAccountHandler)
+	routes.RegisterAccountRoutes(mux, routes.AccountHandlers{
+		Register: handler.CreateAccountHandler,
+		Login:    handler.LoginHandler,
+	})
 
 	log.Printf("Server running on %s", port)
 	if err := http.ListenAndServe(port, mux); err != nil {
