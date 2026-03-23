@@ -1,8 +1,59 @@
-import { Grid, Segment, Form, Button, Header, Divider, Image } from "semantic-ui-react";
+import { useState } from "react";
+import { Grid, Segment, Form, Button, Header, Divider, Image, Message } from "semantic-ui-react";
 import registerImage from "../../assets/loginImage.png";
 import logo from "../../assets/logo.png"; 
 
 function Register() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      const payload = {
+        fullName,
+        email,
+        password,
+      }; 
+
+
+      const response = await fetch("/api/accounts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      setSuccessMessage("Account data sent successfully.");
+      setFullName("");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      if (error instanceof TypeError) {
+        setErrorMessage("Network error. Check that the API is running on port 6969.");
+      } else {
+        setErrorMessage(error.message || "Failed to send account data.");
+      }
+    } finally {
+      setLoading(false);
+      setFullName("");
+      setEmail("");
+      setPassword("");
+    }
+  };
+
   return (
     <Grid
       columns={2}
@@ -34,11 +85,41 @@ function Register() {
 
           <Divider horizontal>or create with email</Divider>
 
-          <Form style={{ margin: "0 auto" }}>
-            <Form.Input label="Full Name" placeholder="Full Name" />
-            <Form.Input label="Email" placeholder="Email" type="email" />
-            <Form.Input label="Password" placeholder="Password" type="password" />
-            <Button type="submit" fluid primary content="Create account" style={{ marginTop: "1rem", color: "white", backgroundColor: "#6bced3" }} />
+          <Form style={{ margin: "0 auto" }} onSubmit={handleSubmit}>
+            <Form.Input
+              label="Full Name"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(_, data) => setFullName(data.value)}
+              required
+            />
+            <Form.Input
+              label="Email"
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(_, data) => setEmail(data.value)}
+              required
+            />
+            <Form.Input
+              label="Password"
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(_, data) => setPassword(data.value)}
+              required
+            />
+            {errorMessage && <Message negative content={errorMessage} />}
+            {successMessage && <Message positive content={successMessage} />}
+            <Button
+              type="submit"
+              fluid
+              primary
+              loading={loading}
+              disabled={loading}
+              content="Create account"
+              style={{ marginTop: "1rem", color: "white", backgroundColor: "#6bced3" }}
+            />
           </Form>
         </Segment>
       </Grid.Column>
