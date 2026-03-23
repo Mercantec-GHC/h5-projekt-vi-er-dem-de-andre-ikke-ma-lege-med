@@ -1,12 +1,64 @@
 [
   {
-    "ContainingType": "WebsitesController",
+    "ContainingType": "MeasurementsController",
+    "Method": "Create",
+    "RelativePath": "api/Measurements",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "measurement",
+        "Type": "UptimeDaddy.API.Models.Measurement",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MeasurementsController",
+    "Method": "Get",
+    "RelativePath": "api/Measurements",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UptimeDaddy.API.Controllers.UsersController",
+    "Method": "GetUsers",
+    "RelativePath": "api/Users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UptimeDaddy.API.Controllers.WebsitesController",
     "Method": "Get",
     "RelativePath": "api/Websites",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UptimeDaddy.API.Controllers.WebsitesController",
+    "Method": "Create",
+    "RelativePath": "api/Websites",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "UptimeDaddy.API.DTOs.CreateWebsiteDto",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]

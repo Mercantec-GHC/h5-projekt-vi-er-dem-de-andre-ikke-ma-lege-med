@@ -5,6 +5,59 @@
     "version": "v1"
   },
   "paths": {
+    "/api/Measurements": {
+      "post": {
+        "tags": [
+          "Measurements"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Measurement"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Measurement"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Measurement"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Measurements"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Websites": {
       "get": {
         "tags": [
@@ -15,11 +68,176 @@
             "description": "OK"
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Websites"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebsiteDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebsiteDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebsiteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     }
   },
-  "components": { },
+  "components": {
+    "schemas": {
+      "CreateWebsiteDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "intervalTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Measurement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "websiteId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "website": {
+            "$ref": "#/components/schemas/Website"
+          },
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dnsLookupMs": {
+            "type": "number",
+            "format": "double"
+          },
+          "connectMs": {
+            "type": "number",
+            "format": "double"
+          },
+          "tlsHandshakeMs": {
+            "type": "number",
+            "format": "double"
+          },
+          "timeToFirstByteMs": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalTimeMs": {
+            "type": "number",
+            "format": "double"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullname": {
+            "type": "string",
+            "nullable": true
+          },
+          "websites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Website"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Website": {
+        "required": [
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "url": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "intervalTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "measurements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Measurement"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
   "tags": [
+    {
+      "name": "Measurements"
+    },
+    {
+      "name": "Users"
+    },
     {
       "name": "Websites"
     }
