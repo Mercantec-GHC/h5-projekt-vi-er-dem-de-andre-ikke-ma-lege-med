@@ -17,10 +17,11 @@ function App() {
 		<>
 			<Navbar />
 			<Container style={{ marginTop: "7rem", padding: "2rem 0" }}>
-				<Button primary onClick={() => setShowRegister(true)} style={{ marginBottom: "1.25rem" }}>
-					Open Register Page
-				</Button>
-				<Cards />
+				<Cards items={[
+					{ header: "12", description: "Active Projects", icon: "circle check" },
+					{ header: "13", description: "Sut dig selv", icon: "chart bar" },
+					{ header: "15", description: "Lorte pis", icon: "chart bar" },
+					]} />
 				<Table />
 			</Container>
 		</>
