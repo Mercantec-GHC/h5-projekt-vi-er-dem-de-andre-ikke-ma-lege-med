@@ -6,6 +6,7 @@ import (
 
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/db"
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,14 +21,20 @@ func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Email == "" || req.Password == "" {
-		http.Error(w, "email and password are required", http.StatusBadRequest)
+	if req.Email == "" || req.Password == "" || req.FullName == "" {
+		http.Error(w, "email and password and name are required", http.StatusBadRequest)
 		return
 	}
 
-	account := models.AccountSchema{
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		http.Error(w, "could not hash password", http.StatusInternalServerError)
+		return
+	}
+
+	account := models.Accounts{
 		Email:    req.Email,
-		Password: req.Password,
+		Password: string(hashedPassword),
 		FullName: req.FullName,
 	}
 

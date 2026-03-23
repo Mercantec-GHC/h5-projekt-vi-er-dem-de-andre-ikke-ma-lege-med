@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type AccountSchema struct {
+type Accounts struct {
 	gorm.Model
 	Email    string `gorm:"uniqueIndex;not null"`
 	Password string `gorm:"column:password_hash;not null"`
