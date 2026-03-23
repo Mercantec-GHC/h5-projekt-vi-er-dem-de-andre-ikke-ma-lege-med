@@ -6,7 +6,7 @@ import MonitorModal from "../monitorModal/index.jsx";
 const monitors = [
   { url: "https://example.com",        statusCode: 200, dnsLookup: "12ms", connect: "34ms", tlsHandshake: "21ms", ttfb: "89ms",  totalTime: "156ms" },
   { url: "https://api.myservice.io",   statusCode: 200, dnsLookup: "8ms",  connect: "22ms", tlsHandshake: "18ms", ttfb: "105ms", totalTime: "153ms" },
-  { url: "https://dashboard.acme.com", statusCode: 503, dnsLookup: "15ms", connect: "41ms", tlsHandshake: "30ms", ttfb: "213ms",     totalTime: "86ms"  },
+  { url: "https://dashboard.acme.com", statusCode: 503, dnsLookup: "15ms", connect: "41ms", tlsHandshake: "30ms", ttfb: "213ms", totalTime: "86ms"  },
   { url: "https://store.widgets.dev",  statusCode: 301, dnsLookup: "10ms", connect: "28ms", tlsHandshake: "24ms", ttfb: "62ms",  totalTime: "124ms" },
   { url: "https://blog.techcorp.io",   statusCode: 200, dnsLookup: "9ms",  connect: "19ms", tlsHandshake: "17ms", ttfb: "74ms",  totalTime: "119ms" },
 ];

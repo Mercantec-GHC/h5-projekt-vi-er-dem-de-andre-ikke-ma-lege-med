@@ -28,12 +28,14 @@
 
 .monitor-table .ui.label {
   background-color: #1a3a30;
-  color: #b0e4cc;
-  border: 1px solid #2f6d59;
+  color: #fff !important;
+  border: 1px solid #66D0BC;
+  width: 100%;
+  text-align: center;
 }
 
 .monitor-table .ui.label.green {
   background-color: #1e4d3a !important;
-  color: #4ea584 !important;
+  color: #fff !important;
   border-color: #408A71 !important;
 }

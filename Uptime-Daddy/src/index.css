@@ -19,24 +19,29 @@ body {
   outline-offset: 2px;
 }
 
-.register-form.ui.form .field > label {
+.register-form.ui.form .field > label,.main-search-input-label {
   color: #b0e4cc !important;
 }
 
 .register-form.ui.form input[type="text"],
 .register-form.ui.form input[type="email"],
-.register-form.ui.form input[type="password"] {
+.register-form.ui.form input[type="password"],
+.main-search-input input[type="text"] {
   background: #0f1f1c !important;
   color: #e8fff6 !important;
   border: 1px solid #2f6d59 !important;
 }
 
-.register-form.ui.form input::placeholder {
+.main-search-input i {
   color: #8fb8a8 !important;
+}
+
+.register-form.ui.form input::placeholder,.main-search-input::placeholder {
+  color: #fff !important;
   opacity: 1;
 }
 
-.register-form.ui.form input:focus {
+.register-form.ui.form input:focus,.main-search-input:focus {
   border-color: #4ea584 !important;
   box-shadow: 0 0 0 1px #4ea584 inset !important;
 }
@@ -57,4 +62,17 @@ color: #e8fff6;
 ::-moz-selection {
 background: #408a71;
 color: #e8fff6;
+}
+
+ .ui.button {
+  background-color: transparent !important;
+  color: #fff !important;
+  border: 2px solid #2f6d59 !important;
+  box-shadow: none !important;
+}
+
+.ui.button:hover {
+  background-color: #0f1f1c !important;
+  color: #fff !important;
+  border-color: #408A71 !important;
 }
