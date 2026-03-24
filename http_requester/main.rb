@@ -1,4 +1,5 @@
 require_relative "lib/boot_loader"
 
-curl_response = CurlService.new("https://www.google.com").curl_response_with_ms_lookup
-puts curl_response
+@logger = Logger.new($stdout)
+@http_requester = HttpRequester.new(@logger)
+@http_requester.execute

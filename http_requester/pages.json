@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "user_id": 1,
+      "pages": [
+        {
+          "path": "https://www.google.com",
+          "interval_time": 60
+        },
+        {
+          "path": "https://www.facebook.com",
+          "interval_time": 30
+        }
+      ]
+    }
+  ]
+
+}

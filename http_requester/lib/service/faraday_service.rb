@@ -16,7 +16,6 @@ class FaradayService
     faraday_client.get(destanation_path)
   end
 
-
   def faraday_client
     @faraday_client ||= begin
       Faraday.new do |faraday|
