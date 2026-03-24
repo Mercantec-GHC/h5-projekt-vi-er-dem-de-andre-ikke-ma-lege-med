@@ -1,30 +1,101 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UptimeDaddy.API.Models;
+using Microsoft.EntityFrameworkCore;
 using UptimeDaddy.API.Data;
 
-[ApiController]
-[Route("api/[controller]")]
-public class MeasurementsController : ControllerBase
+namespace UptimeDaddy.API.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public MeasurementsController(AppDbContext context)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class MeasurementsController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    [HttpPost]
-    public IActionResult Create(Measurement measurement)
-    {
-        _context.Measurements.Add(measurement);
-        _context.SaveChanges();
+        public MeasurementsController(AppDbContext context)
+        {
+            _context = context;
+        }
 
-        return Ok(measurement);
-    }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Models.Measurement measurement)
+        {
+            _context.Measurements.Add(measurement);
+            await _context.SaveChangesAsync();
 
-    [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok(_context.Measurements.ToList());
+            return Ok(measurement);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var measurements = await _context.Measurements
+                .OrderByDescending(m => m.CreatedAt)
+                .Select(m => new
+                {
+                    id = m.Id,
+                    websiteId = m.WebsiteId,
+                    statusCode = m.StatusCode,
+                    dnsLookupMs = m.DnsLookupMs,
+                    connectMs = m.ConnectMs,
+                    tlsHandshakeMs = m.TlsHandshakeMs,
+                    timeToFirstByteMs = m.TimeToFirstByteMs,
+                    totalTimeMs = m.TotalTimeMs,
+                    createdAt = m.CreatedAt
+                })
+                .ToListAsync();
+
+            return Ok(measurements);
+        }
+
+        [HttpGet("website/{websiteId:long}")]
+        public async Task<IActionResult> GetByWebsite(long websiteId, [FromQuery] int? hours)
+        {
+            var query = _context.Measurements
+                .Where(m => m.WebsiteId == websiteId);
+
+            if (hours.HasValue)
+            {
+                var fromTime = DateTime.UtcNow.AddHours(-hours.Value);
+                query = query.Where(m => m.CreatedAt >= fromTime);
+            }
+
+            var measurements = await query
+                .OrderBy(m => m.CreatedAt)
+                .Select(m => new
+                {
+                    createdAt = m.CreatedAt,
+                    statusCode = m.StatusCode,
+                    dnsLookupMs = m.DnsLookupMs,
+                    connectMs = m.ConnectMs,
+                    tlsHandshakeMs = m.TlsHandshakeMs,
+                    timeToFirstByteMs = m.TimeToFirstByteMs,
+                    totalTimeMs = m.TotalTimeMs
+                })
+                .ToListAsync();
+
+            return Ok(measurements);
+        }
+
+        [HttpGet("website/{websiteId:long}/latest")]
+        public async Task<IActionResult> GetLatestByWebsite(long websiteId)
+        {
+            var latestMeasurement = await _context.Measurements
+                .Where(m => m.WebsiteId == websiteId)
+                .OrderByDescending(m => m.CreatedAt)
+                .Select(m => new
+                {
+                    websiteId = m.WebsiteId,
+                    statusCode = m.StatusCode,
+                    totalTimeMs = m.TotalTimeMs,
+                    createdAt = m.CreatedAt
+                })
+                .FirstOrDefaultAsync();
+
+            if (latestMeasurement == null)
+            {
+                return NotFound("Ingen målinger fundet for dette website.");
+            }
+
+            return Ok(latestMeasurement);
+        }
     }
 }

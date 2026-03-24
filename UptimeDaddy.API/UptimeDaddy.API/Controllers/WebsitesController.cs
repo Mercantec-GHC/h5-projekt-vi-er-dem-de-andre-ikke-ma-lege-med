@@ -23,7 +23,16 @@ namespace UptimeDaddy.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var websites = await _context.Websites.ToListAsync();
+            var websites = await _context.Websites
+                .Select(w => new
+                {
+                    id = w.Id,
+                    url = w.Url,
+                    intervalTime = w.IntervalTime,
+                    userId = w.UserId
+                })
+                .ToListAsync();
+
             return Ok(websites);
         }
 
@@ -38,6 +47,29 @@ namespace UptimeDaddy.API.Controllers
             }
 
             return Ok(website);
+        }
+
+        [HttpGet("{id:long}/status")]
+        public async Task<IActionResult> GetStatus(long id)
+        {
+            var latestMeasurement = await _context.Measurements
+                .Where(m => m.WebsiteId == id)
+                .OrderByDescending(m => m.CreatedAt)
+                .Select(m => new
+                {
+                    websiteId = m.WebsiteId,
+                    statusCode = m.StatusCode,
+                    totalTimeMs = m.TotalTimeMs,
+                    createdAt = m.CreatedAt
+                })
+                .FirstOrDefaultAsync();
+
+            if (latestMeasurement == null)
+            {
+                return NotFound("Ingen målinger fundet for dette website.");
+            }
+
+            return Ok(latestMeasurement);
         }
 
         [HttpPost]
