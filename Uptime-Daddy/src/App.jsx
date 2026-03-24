@@ -1,4 +1,3 @@
-import "./App.css";
 import { useState } from "react";
 import { Container, Button } from "semantic-ui-react";
 import Navbar from "./molecules/navbar/navbar";
