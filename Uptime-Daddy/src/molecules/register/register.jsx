@@ -4,6 +4,8 @@ import { Grid, Segment, Form, Button, Header, Divider, Image, Message} from "sem
 import registerImage from "../../assets/loginImage.png";
 import logo from "../../assets/logo.png";
 
+const API_URL = "http://10.133.51.121:6969/accounts/";
+
 function Register() {
 	const [fullName, setFullName] = useState("");
 	const [email, setEmail] = useState("");
@@ -24,22 +26,13 @@ function Register() {
 				password,
 			};
 
-			const response = await fetch("/api/accounts/register", {
+			const response = await fetch(`${API_URL}register`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(payload),
 			});
-
-			const kim = await fetch("http://10.133.51.122:6969/accounts/", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(payload),
-			});
-			console.log(kim)
 
 			if (!response.ok) {
 				throw new Error(

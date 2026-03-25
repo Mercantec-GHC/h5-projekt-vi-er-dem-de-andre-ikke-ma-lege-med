@@ -1,20 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import {
-  Grid,
-  Segment,
-  Form,
-  Button,
-  Header,
-  Divider,
-  Image,
-  Modal,
-  Input,
-  Message,
-} from "semantic-ui-react";
+import { Grid, Segment, Form, Button, Header, Divider, Image, Modal, Input, Message } from "semantic-ui-react";
 import registerImage from "../../assets/loginImage.png";
 import logo from "../../assets/logo.png";
+
+const API_URL = "http://10.133.51.121:6969/accounts/";
 
 function Login() {
   const navigate = useNavigate();
@@ -41,7 +32,7 @@ function Login() {
     try {
       const payload = { email, password };
 
-      const response = await fetch("/api/accounts/login", {
+      const response = await fetch(`${API_URL}login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
