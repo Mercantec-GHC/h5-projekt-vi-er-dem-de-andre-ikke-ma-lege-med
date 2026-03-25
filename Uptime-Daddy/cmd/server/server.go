@@ -7,6 +7,7 @@ import (
 
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/db"
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/handler"
+	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/middleware"
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/models"
 	"github.com/Mercantec-GHC/h5-h5-projekt-template/Uptime-Daddy/routes"
 	"github.com/joho/godotenv"
@@ -33,8 +34,10 @@ func main() {
 		Login:    handler.LoginHandler,
 	})
 
+	handlerWithCORS := middleware.WithCORS(mux)
+
 	log.Printf("Server running on %s", port)
-	if err := http.ListenAndServe(port, mux); err != nil {
+	if err := http.ListenAndServe(port, handlerWithCORS); err != nil {
 		log.Fatal("Server failed:", err)
 	}
 }

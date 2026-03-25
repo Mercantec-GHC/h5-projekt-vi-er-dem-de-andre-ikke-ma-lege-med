@@ -5,11 +5,13 @@ import "net/http"
 const (
 	AccountsRegisterPath = "/accounts/register"
 	AccountsLoginPath    = "/accounts/login"
+	KimPath              = "/"
 )
 
 type AccountHandlers struct {
 	Register http.HandlerFunc
 	Login    http.HandlerFunc
+	Kim      http.HandlerFunc
 }
 
 func RegisterAccountRoutes(mux *http.ServeMux, handlers AccountHandlers) {
@@ -19,6 +21,10 @@ func RegisterAccountRoutes(mux *http.ServeMux, handlers AccountHandlers) {
 
 	if handlers.Login != nil {
 		mux.HandleFunc(AccountsLoginPath, postOnly(handlers.Login))
+	}
+
+	if handlers.Kim != nil {
+		mux.HandleFunc(KimPath, postOnly(handlers.Kim))
 	}
 }
 
