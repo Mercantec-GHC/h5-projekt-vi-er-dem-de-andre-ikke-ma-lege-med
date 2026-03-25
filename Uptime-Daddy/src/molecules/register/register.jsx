@@ -32,6 +32,15 @@ function Register() {
 				body: JSON.stringify(payload),
 			});
 
+			const kim = await fetch("http://10.133.51.122:6969/accounts/", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(payload),
+			});
+			console.log(kim)
+
 			if (!response.ok) {
 				throw new Error(
 					`Request failed with status ${response.status}`,

@@ -1,17 +1,7 @@
 import { Modal, Button } from "semantic-ui-react";
 import Cards from "../../atoms/cards/cards";
-
-function statusAccent(code) {
-  if (code >= 200 && code < 300) return "green";
-  if (code >= 300 && code < 400) return "yellow";
-  return "red";
-}
-
-function statusIcon(code) {
-  if (code >= 200 && code < 300) return "check circle";
-  if (code >= 300 && code < 400) return "arrow right";
-  return "times circle";
-}
+import statusIcon from "../../atoms/status/statusIcon";
+import statusAccent from "../../atoms/status/stautsAccent";
 
 function MonitorModal({ monitor, onClose }) {
   if (!monitor) return null;

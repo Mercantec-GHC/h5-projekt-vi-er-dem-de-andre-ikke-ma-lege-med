@@ -1,17 +1,111 @@
-import { Button, Container, Header, Input } from "semantic-ui-react";
+import { useState } from "react";
+import { Button, Container, Header, Icon, Input, Modal } from "semantic-ui-react";
+import Cards from "../../atoms/cards/cards";
+import logo from "../../assets/logo.png";
+import statusIcon from "../../atoms/status/statusIcon";
+import statusAccent from "../../atoms/status/stautsAccent";
+
+const MOCK_PING_DATA = {
+    statusCode: 200,
+    dnsLookup: "12ms",
+    connect: "34ms",
+    tlsHandshake: "21ms",
+    ttfb: "89ms",
+    totalTime: "156ms",
+};
+
+function delay(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
 
 function SearchWebsite() {
+    const [searchValue, setSearchValue] = useState("");
+    const [pingData, setPingData] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSearch = async () => {
+        const trimmedValue = searchValue.trim();
+
+        if (!trimmedValue) return;
+
+        setIsLoading(true);
+
+        await delay(1000);
+
+        setPingData({
+            url: trimmedValue,
+            ...MOCK_PING_DATA,
+        });
+
+        setIsLoading(false);
+        setIsModalOpen(true);
+    };
+
+    const pingCards = pingData
+        ? [
+            { header: String(pingData.statusCode), description: "Status Code", icon: statusIcon(pingData.statusCode), accent: statusAccent(pingData.statusCode) },
+            { header: pingData.dnsLookup, description: "DNS Lookup", icon: "search", accent: "blue" },
+            { header: pingData.connect, description: "Connect", icon: "plug", accent: "blue" },
+            { header: pingData.tlsHandshake, description: "TLS Handshake", icon: "lock", accent: "blue" },
+            { header: pingData.ttfb, description: "Time to First Byte", icon: "clock", accent: "green" },
+            { header: pingData.totalTime, description: "Total Time", icon: "hourglass half", accent: "green" },
+        ]
+        : [];
+
     return (
+        <>
         <Container style={{ backgroundColor: "#091413", padding: "1rem", borderRadius: "8px", marginBottom: "2rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                <Header as="h2" style={{ color: "#B0E4CC", margin: 0, fontSize: '2rem' }}>Search Website</Header>
+                <Header as="h2" style={{ color: "#B0E4CC", margin: 0, fontSize: "2rem" }}>Search Website</Header>
                 <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                    <Input iconPosition="left" className="main-search-input" icon='search' placeholder='Search...' />
-                    <Button>Search</Button>
+                    <Input
+                        iconPosition="left"
+                        className="main-search-input"
+                        icon="search"
+                        placeholder="Search..."
+                        value={searchValue}
+                        disabled={isLoading}
+                        onChange={(event) => setSearchValue(event.target.value)}
+                        onKeyDown={(event) => {
+                            if (event.key === "Enter" && !isLoading) {
+                                handleSearch();
+                            }
+                        }}
+                    />
+                    <Button onClick={handleSearch} disabled={isLoading}>Search</Button>
                 </div>
             </div>
-            <p style={{color: "#408A71"}}>Input your website here to add it to your list on montired webistes</p>
+            <p style={{ color: "#408A71" }}>Input your website here to add it to your list on montired webistes</p>
         </Container>
+        {isLoading && (
+            <div className="global-spinner-overlay">
+                <img
+                    src={logo}
+                    alt="Loading"
+                    className="global-spinner-logo"
+                />
+                <span className="global-spinner-text">Fetching ping data...</span>
+            </div>
+        )}
+        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} size="large">
+            <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59" }}>
+                {pingData?.url}
+            </Modal.Header>
+            <Modal.Content style={{ backgroundColor: "#091413" }}>
+                <Cards items={pingCards} />
+            </Modal.Content>
+            <Modal.Actions style={{ backgroundColor: "#091413", borderTop: "1px solid #2f6d59" }}>
+                <Button onClick={() => setIsModalOpen(false)}>Edit</Button>
+                <Button onClick={() => setIsModalOpen(false)} primary>
+                    <Icon name="check" />
+                    Confirm
+                </Button>
+            </Modal.Actions>
+        </Modal>
+        </>
     );
 }
 

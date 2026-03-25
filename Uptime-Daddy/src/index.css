@@ -76,3 +76,36 @@ color: #e8fff6;
   color: #fff !important;
   border-color: #408A71 !important;
 }
+
+@keyframes search-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.global-spinner-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: rgba(9, 20, 19, 0.82);
+  z-index: 1000;
+}
+
+.global-spinner-logo {
+  width: auto;
+  height: 125px;
+  animation: search-spin 1s linear infinite;
+}
+
+.global-spinner-text {
+  color: #b0e4cc;
+  font-size: 1.2rem;
+}
