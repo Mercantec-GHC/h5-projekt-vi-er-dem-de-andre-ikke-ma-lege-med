@@ -36,10 +36,68 @@ namespace UptimeDaddy.API.Controllers
             return Ok(websites);
         }
 
+        [HttpGet("user/{userId:long}")]
+        public async Task<IActionResult> GetByUser(long userId)
+        {
+            var websites = await _context.Websites
+                .Where(w => w.UserId == userId)
+                .Select(w => new
+                {
+                    id = w.Id,
+                    url = w.Url,
+                    intervalTime = w.IntervalTime,
+                    userId = w.UserId
+                })
+                .ToListAsync();
+
+            return Ok(websites);
+        }
+
+        [HttpGet("user/{userId:long}/with-measurements")]
+        public async Task<IActionResult> GetByUserWithMeasurements(long userId)
+        {
+            var websites = await _context.Websites
+                .Where(w => w.UserId == userId)
+                .Include(w => w.Measurements)
+                .Select(w => new
+                {
+                    id = w.Id,
+                    url = w.Url,
+                    intervalTime = w.IntervalTime,
+                    userId = w.UserId,
+                    measurements = w.Measurements
+                        .OrderByDescending(m => m.CreatedAt)
+                        .Select(m => new
+                        {
+                            id = m.Id,
+                            websiteId = m.WebsiteId,
+                            statusCode = m.StatusCode,
+                            dnsLookupMs = m.DnsLookupMs,
+                            connectMs = m.ConnectMs,
+                            tlsHandshakeMs = m.TlsHandshakeMs,
+                            timeToFirstByteMs = m.TimeToFirstByteMs,
+                            totalTimeMs = m.TotalTimeMs,
+                            createdAt = m.CreatedAt
+                        })
+                        .ToList()
+                })
+                .ToListAsync();
+
+            return Ok(websites);
+        }
+
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetById(long id)
         {
-            var website = await _context.Websites.FirstOrDefaultAsync(w => w.Id == id);
+            var website = await _context.Websites
+                .Select(w => new
+                {
+                    id = w.Id,
+                    url = w.Url,
+                    intervalTime = w.IntervalTime,
+                    userId = w.UserId
+                })
+                .FirstOrDefaultAsync(w => w.id == id);
 
             if (website == null)
             {
@@ -99,7 +157,13 @@ namespace UptimeDaddy.API.Controllers
                 website.IntervalTime
             );
 
-            return Ok(website);
+            return Ok(new
+            {
+                id = website.Id,
+                url = website.Url,
+                intervalTime = website.IntervalTime,
+                userId = website.UserId
+            });
         }
 
         [HttpDelete("{id:long}")]
