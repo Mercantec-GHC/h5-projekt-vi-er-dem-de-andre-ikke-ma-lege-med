@@ -22,6 +22,12 @@ namespace UptimeDaddy.API.Services
             var host = _configuration["Mqtt:Host"];
             var port = int.Parse(_configuration["Mqtt:Port"] ?? "1883");
 
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                Console.WriteLine("MQTT host is not configured.");
+                return;
+            }
+
             var factory = new MqttClientFactory();
             var client = factory.CreateMqttClient();
 
@@ -47,14 +53,21 @@ namespace UptimeDaddy.API.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error: {ex.Message}");
+                    Console.WriteLine($"Error while processing MQTT message: {ex.Message}");
                 }
             };
 
-            await client.ConnectAsync(options);
-            await client.SubscribeAsync("uptime/measurements");
+            try
+            {
+                await client.ConnectAsync(options);
+                await client.SubscribeAsync("uptime/measurements");
 
-            Console.WriteLine("MQTT connected!");
+                Console.WriteLine("MQTT connected!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"MQTT failed to connect: {ex.Message}");
+            }
         }
     }
 }

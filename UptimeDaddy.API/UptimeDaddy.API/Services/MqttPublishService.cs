@@ -18,14 +18,18 @@ namespace UptimeDaddy.API.Services
             var host = _configuration["Mqtt:Host"];
             var port = int.Parse(_configuration["Mqtt:Port"] ?? "1883");
 
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                Console.WriteLine("MQTT host is not configured.");
+                return;
+            }
+
             var factory = new MqttClientFactory();
             var client = factory.CreateMqttClient();
 
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(host, port)
                 .Build();
-
-            await client.ConnectAsync(options);
 
             var payloadObject = new
             {
@@ -44,8 +48,18 @@ namespace UptimeDaddy.API.Services
                 .WithPayload(Encoding.UTF8.GetBytes(payload))
                 .Build();
 
-            await client.PublishAsync(message);
-            await client.DisconnectAsync();
+            try
+            {
+                await client.ConnectAsync(options);
+                await client.PublishAsync(message);
+                await client.DisconnectAsync();
+
+                Console.WriteLine("MQTT publish: website_created");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"MQTT publish failed (website_created): {ex.Message}");
+            }
         }
 
         public async Task PublishWebsiteDeletedAsync(long userId, long websiteId)
@@ -53,14 +67,18 @@ namespace UptimeDaddy.API.Services
             var host = _configuration["Mqtt:Host"];
             var port = int.Parse(_configuration["Mqtt:Port"] ?? "1883");
 
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                Console.WriteLine("MQTT host is not configured.");
+                return;
+            }
+
             var factory = new MqttClientFactory();
             var client = factory.CreateMqttClient();
 
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(host, port)
                 .Build();
-
-            await client.ConnectAsync(options);
 
             var payloadObject = new
             {
@@ -77,8 +95,18 @@ namespace UptimeDaddy.API.Services
                 .WithPayload(Encoding.UTF8.GetBytes(payload))
                 .Build();
 
-            await client.PublishAsync(message);
-            await client.DisconnectAsync();
+            try
+            {
+                await client.ConnectAsync(options);
+                await client.PublishAsync(message);
+                await client.DisconnectAsync();
+
+                Console.WriteLine("MQTT publish: website_deleted");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"MQTT publish failed (website_deleted): {ex.Message}");
+            }
         }
     }
 }
