@@ -4,6 +4,8 @@ import Cards from "../../atoms/cards/cards";
 import logo from "../../assets/logo.png";
 import statusIcon from "../../atoms/status/statusIcon";
 import statusAccent from "../../atoms/status/stautsAccent";
+import { API_URL } from "../../util/api.jsx";
+import { getAuthPayload } from "../../util/auth";
 
 const MOCK_PING_DATA = {
     statusCode: 200,
@@ -32,6 +34,29 @@ function SearchWebsite() {
         if (!trimmedValue) return;
 
         setIsLoading(true);
+
+        const authPayload = getAuthPayload();
+        const userId = authPayload?.userId;
+
+        const payload = {
+				"url":trimmedValue,
+                "userId": userId,
+                "intervalTime": 60,
+		};
+
+		const response = await fetch(`${API_URL}/api/Websites`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(payload),
+		});
+
+		if (!response.ok) {
+			throw new Error(
+				`Request failed with status ${response.status}`,
+			);  
+		}
 
         await delay(1000);
 
@@ -92,7 +117,7 @@ function SearchWebsite() {
         )}
         <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} size="large">
             <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59" }}>
-                {pingData?.url}
+                {pingData?.url}               
             </Modal.Header>
             <Modal.Content style={{ backgroundColor: "#091413" }}>
                 <Cards items={pingCards} />

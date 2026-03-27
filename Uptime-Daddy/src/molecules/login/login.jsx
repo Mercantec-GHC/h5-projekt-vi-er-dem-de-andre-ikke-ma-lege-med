@@ -4,14 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Segment, Form, Button, Header, Divider, Image, Modal, Input, Message } from "semantic-ui-react";
 import registerImage from "../../assets/loginImage.png";
 import logo from "../../assets/logo.png";
-
-const API_URL = "http://10.133.51.121:6969/accounts/";
+import { API_URL } from "../../util/api.jsx";
+import { AUTH_TOKEN_KEY } from "../../util/auth";
 
 function Login() {
   const navigate = useNavigate();
   const [resetMode, setResetMode] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,7 +31,7 @@ function Login() {
     try {
       const payload = { email, password };
 
-      const response = await fetch(`${API_URL}login`, {
+      const response = await fetch(`/accounts/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +50,7 @@ function Login() {
         throw new Error("Login succeeded but no token was returned.");
       }
 
-      localStorage.setItem("authToken", token);
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
       setSuccessMessage("Logged in successfully.");
       setPassword("");
       navigate("/");

@@ -10,4 +10,16 @@ export default defineConfig({
   build: {
     cssMinify: false,
   },
+  server: {
+    proxy: {
+      '/accounts': {
+        target: 'http://10.133.51.121:6969',
+        changeOrigin: true,
+      },
+      '/api': {
+        target: 'http://10.133.51.121:8080',
+        changeOrigin: true,
+      },
+    },
+  },
 })

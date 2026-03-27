@@ -6,18 +6,20 @@ import statusAccent from "../../atoms/status/stautsAccent";
 function MonitorModal({ monitor, onClose }) {
   if (!monitor) return null;
 
+  const latest = monitor.measurements?.at(-1);
+
   const items = [
     {
-      header: String(monitor.statusCode),
+      header: latest ? String(latest.statusCode) : "-",
       description: "Status Code",
-      icon: statusIcon(monitor.statusCode),
-      accent: statusAccent(monitor.statusCode),
+      icon: statusIcon(latest?.statusCode),
+      accent: statusAccent(latest?.statusCode),
     },
-    { header: monitor.dnsLookup,    description: "DNS Lookup",          icon: "search",    accent: "blue"  },
-    { header: monitor.connect,      description: "Connect",             icon: "plug",      accent: "blue"  },
-    { header: monitor.tlsHandshake, description: "TLS Handshake",       icon: "lock",      accent: "blue"  },
-    { header: monitor.ttfb,         description: "Time to First Byte",  icon: "clock",     accent: "green" },
-    { header: monitor.totalTime,    description: "Total Time",          icon: "hourglass half", accent: "green" },
+    { header: latest?.dnsLookupMs != null ? `${latest.dnsLookupMs}ms` : "-",        description: "DNS Lookup",        icon: "search",         accent: "blue"  },
+    { header: latest?.connectMs != null ? `${latest.connectMs}ms` : "-",            description: "Connect",           icon: "plug",           accent: "blue"  },
+    { header: latest?.tlsHandshakeMs != null ? `${latest.tlsHandshakeMs}ms` : "-",  description: "TLS Handshake",     icon: "lock",           accent: "blue"  },
+    { header: latest?.timeToFirstByteMs != null ? `${latest.timeToFirstByteMs}ms` : "-", description: "Time to First Byte", icon: "clock",   accent: "green" },
+    { header: latest?.totalTimeMs != null ? `${latest.totalTimeMs}ms` : "-",        description: "Total Time",        icon: "hourglass half", accent: "green" },
   ];
 
   return (

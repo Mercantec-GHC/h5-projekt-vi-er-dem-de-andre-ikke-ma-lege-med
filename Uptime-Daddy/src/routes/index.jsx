@@ -2,10 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "../molecules/login/login";
 import Register from "../molecules/register/register";
 import App from "../App";
-
-function hasAuthToken() {
-  return Boolean(localStorage.getItem("authToken"));
-}
+import Settings from "../pages/settings";
+import { hasAuthToken } from "../util/auth";
 
 function ProtectedRoute({ children }) {
   return hasAuthToken() ? children : <Navigate to="/login" replace />;
@@ -40,6 +38,14 @@ export default function Router() {
           element={
             <ProtectedRoute>
               <App />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />
