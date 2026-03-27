@@ -1,5 +1,5 @@
 class UrlData
-  attr_accessor :status_code, :dns_lookup, :connect_to_page, :tls_hand_shake, :time_to_first_byte, :total_time, :url
+  attr_reader :status_code, :dns_lookup, :connect_to_page, :tls_hand_shake, :time_to_first_byte, :total_time, :url
 
   def initialize(curl_response, url)
     @url = url
