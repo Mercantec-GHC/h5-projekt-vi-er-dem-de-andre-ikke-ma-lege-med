@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "../molecules/login/login";
-import Register from "../molecules/register/register";
+import Login from "../pages/login/login";
+import Register from "../pages/register/register";
 import App from "../App";
 import Settings from "../pages/settings";
 import { hasAuthToken } from "../util/auth";

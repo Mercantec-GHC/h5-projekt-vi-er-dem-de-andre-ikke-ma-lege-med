@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Container, Button } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 import Navbar from "./molecules/navbar/navbar";
 import Table from "./molecules/table/table";
 import Cards from "./atoms/cards/cards";
-import Register from "./molecules/register/register";
+import Register from "./pages/register/register";
 import SearchWebsite from "./molecules/searchWebsite";
 
 function App() {

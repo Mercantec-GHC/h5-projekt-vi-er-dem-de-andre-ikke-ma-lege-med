@@ -5,7 +5,7 @@ import { Grid, Segment, Form, Button, Header, Divider, Image, Modal, Input, Mess
 import registerImage from "../../assets/loginImage.png";
 import logo from "../../assets/logo.png";
 import { ACCOUNTS_URL } from "../../util/api.jsx";
-import { AUTH_TOKEN_KEY } from "../../util/auth";
+import { AUTH_TOKEN_KEY } from "../../util/auth.js";
 
 function Login() {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function Login() {
       }
 
       const data = await response.json().catch(() => ({}));
-      const token = data?.token || data?.accessToken || data?.jwt || data?.data?.token;
+      const token = data?.token;
 
       if (!token) {
         throw new Error("Login succeeded but no token was returned.");
