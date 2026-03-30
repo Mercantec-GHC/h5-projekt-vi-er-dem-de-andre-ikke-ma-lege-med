@@ -18,7 +18,7 @@ function TableComponent() {
 		setLoading(true);
 
 		try {
-			const response = await fetch(`${API_URL}/api/Websites/user/${userId}/with-measurements`, {
+			const response = await fetch(`${API_URL}/Websites/user/${userId}/with-measurements`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",

@@ -44,7 +44,7 @@ function SearchWebsite() {
                 "intervalTime": 60,
 		};
 
-		const response = await fetch(`${API_URL}/api/Websites`, {
+		const response = await fetch(`${API_URL}/Websites`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

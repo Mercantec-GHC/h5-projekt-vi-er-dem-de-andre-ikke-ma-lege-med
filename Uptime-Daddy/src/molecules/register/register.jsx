@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Grid, Segment, Form, Button, Header, Divider, Image, Message} from "semantic-ui-react";
 import registerImage from "../../assets/loginImage.png";
 import logo from "../../assets/logo.png";
-import { API_URL } from "../../util/api.jsx";
+import { ACCOUNTS_URL } from "../../util/api.jsx";
 
 
 function Register() {
@@ -26,7 +26,7 @@ function Register() {
 				password,
 			};
 
-			const response = await fetch(`/accounts/register`, {
+			const response = await fetch(`${ACCOUNTS_URL}/register`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

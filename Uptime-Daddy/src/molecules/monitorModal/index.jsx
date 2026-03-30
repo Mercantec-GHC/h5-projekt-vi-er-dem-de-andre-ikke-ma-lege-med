@@ -28,7 +28,7 @@ function MonitorModal({ monitor, onClose }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/Websites/${website.id}`, {
+      const response = await fetch(`${API_URL}/Websites/${website.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

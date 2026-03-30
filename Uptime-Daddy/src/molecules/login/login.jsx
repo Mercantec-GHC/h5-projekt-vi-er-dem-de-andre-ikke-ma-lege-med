@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Segment, Form, Button, Header, Divider, Image, Modal, Input, Message } from "semantic-ui-react";
 import registerImage from "../../assets/loginImage.png";
 import logo from "../../assets/logo.png";
-import { API_URL } from "../../util/api.jsx";
+import { ACCOUNTS_URL } from "../../util/api.jsx";
 import { AUTH_TOKEN_KEY } from "../../util/auth";
 
 function Login() {
@@ -31,7 +31,7 @@ function Login() {
     try {
       const payload = { email, password };
 
-      const response = await fetch(`/accounts/login`, {
+      const response = await fetch(`${ACCOUNTS_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

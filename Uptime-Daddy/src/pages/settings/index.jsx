@@ -44,8 +44,8 @@ function Settings() {
                         />
 
                         <div className="settings-actions">
-                            <Button >Save</Button>
-                            <Button >Reset</Button>
+                            <Button>Save</Button>
+                            <Button>Reset</Button>
                         </div>
 
                     </Form>
