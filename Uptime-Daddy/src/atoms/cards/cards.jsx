@@ -31,15 +31,15 @@ function Cards({ items = [] }) {
                   {item.description}
                 </CardDescription>
                 {item.icon && (
-					<div style={{
-					backgroundColor: accent.iconBg,
-					borderRadius: "0.5rem",
-					width: "2.5rem",
-					height: "2.5rem",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					}}>
+                  <div style={{
+                    backgroundColor: accent.iconBg,
+                    borderRadius: "0.5rem",
+                    width: "2.5rem",
+                    height: "2.5rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    }}>
                     <Icon name={item.icon} style={{ color: accent.iconColor, margin: 0, display: "block", lineHeight: "1" }} />
                   </div>
                 )}

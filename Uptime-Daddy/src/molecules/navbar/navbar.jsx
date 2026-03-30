@@ -21,10 +21,10 @@ function Navbar() {
                 </Menu.Item>
                 <Menu.Menu position="right">
                     <Menu.Item>
-                        <Button compact>Dashboard</Button>
+                        <Button compact onClick={() => navigate("/")}>Dashboard</Button>
                     </Menu.Item>
                     <Menu.Item>
-                        <Button compact>Settings</Button>
+                        <Button compact onClick={() => navigate("/settings")}>Settings</Button>
                     </Menu.Item>
                     <Menu.Item>
                         <Button compact negative onClick={handleLogout}>Logout</Button>

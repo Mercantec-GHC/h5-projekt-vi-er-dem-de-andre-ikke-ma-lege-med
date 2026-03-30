@@ -4,17 +4,11 @@ import { Table, Label } from "semantic-ui-react";
 import MonitorModal from "../monitorModal/index.jsx";
 import { API_URL } from "../../util/api.jsx";
 import { getAuthPayload } from "../../util/auth";
-
-function statusColor(code) {
-	if (code >= 200 && code < 300) return "green";
-	if (code >= 300 && code < 400) return "yellow";
-	return "red";
-}
+import accents from "../../atoms/status/stautsAccent";
+import logo from "../../assets/logo.png";
 
 function TableComponent() {
 	const [selected, setSelected] = useState(null);
-	const [errorMessage, setErrorMessage] = useState("");
-	const [successMessage, setSuccessMessage] = useState("");
 	const [loading, setLoading] = useState(false);
   	const [websiteData, setWebsiteData] = useState([]);
 	const authPayload = getAuthPayload();
@@ -22,8 +16,6 @@ function TableComponent() {
 
 	const fetchWebsiteData = async () => {
 		setLoading(true);
-		setErrorMessage("");
-		setSuccessMessage("");
 
 		try {
 			const response = await fetch(`${API_URL}/api/Websites/user/${userId}/with-measurements`, {
@@ -42,17 +34,8 @@ function TableComponent() {
 				);
 			}
 
-			setSuccessMessage("Account data sent successfully.");
 		} catch (error) {
-			if (error instanceof TypeError) {
-				setErrorMessage(
-					"Network error. Check that the API is running on port 6969.",
-				);
-			} else {
-				setErrorMessage(
-					error.message || "Failed to send account data.",
-				);
-			}
+			console.error("Error fetching account data:", error);
 		} finally {
 			setLoading(false);
 		}
@@ -64,6 +47,16 @@ function TableComponent() {
 
 	return (
 		<>
+			{loading && (
+				<div className="global-spinner-overlay">
+					<img
+						src={logo}
+						alt="Loading"
+						className="global-spinner-logo"
+					/>
+					<span className="global-spinner-text">Loading websites...</span>
+				</div>
+			)}
 			<Table celled selectable className="monitor-table">
 				<Table.Header>
 					<Table.Row>
@@ -88,7 +81,7 @@ function TableComponent() {
 					>
 						<Table.Cell>{m.url}</Table.Cell>
 						<Table.Cell>
-						<Label color={statusColor(latest?.statusCode)}>
+						<Label color={accents.statusAccent(latest?.statusCode)}>
 							{latest?.statusCode ?? "-"}
 						</Label>
 						</Table.Cell>

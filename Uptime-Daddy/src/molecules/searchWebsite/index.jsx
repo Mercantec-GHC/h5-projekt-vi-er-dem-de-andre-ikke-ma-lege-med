@@ -3,7 +3,7 @@ import { Button, Container, Header, Icon, Input, Modal } from "semantic-ui-react
 import Cards from "../../atoms/cards/cards";
 import logo from "../../assets/logo.png";
 import statusIcon from "../../atoms/status/statusIcon";
-import statusAccent from "../../atoms/status/stautsAccent";
+import accents from "../../atoms/status/stautsAccent";
 import { API_URL } from "../../util/api.jsx";
 import { getAuthPayload } from "../../util/auth";
 
@@ -69,14 +69,19 @@ function SearchWebsite() {
         setIsModalOpen(true);
     };
 
+    const handleConfirm = () => {
+        setIsModalOpen(false);
+        window.location.reload();
+    };
+
     const pingCards = pingData
         ? [
-            { header: String(pingData.statusCode), description: "Status Code", icon: statusIcon(pingData.statusCode), accent: statusAccent(pingData.statusCode) },
-            { header: pingData.dnsLookup, description: "DNS Lookup", icon: "search", accent: "blue" },
-            { header: pingData.connect, description: "Connect", icon: "plug", accent: "blue" },
-            { header: pingData.tlsHandshake, description: "TLS Handshake", icon: "lock", accent: "blue" },
-            { header: pingData.ttfb, description: "Time to First Byte", icon: "clock", accent: "green" },
-            { header: pingData.totalTime, description: "Total Time", icon: "hourglass half", accent: "green" },
+            { header: String(pingData.statusCode), description: "Status Code", icon: statusIcon(pingData.statusCode), accent: accents.statusAccent(pingData.statusCode) },
+            { header: pingData.dnsLookupMs, description: "DNS Lookup", icon: "search", accent: accents.dnsAccent(pingData.dnsLookupMs) },
+            { header: pingData.connectMs, description: "Connect", icon: "plug", accent: accents.connectAccent(pingData.connectMs) },
+            { header: pingData.tlsHandshakeMs, description: "TLS Handshake", icon: "lock", accent: accents.tlsAccent(pingData.tlsHandshakeMs) },
+            { header: pingData.timeToFirstByteMs, description: "Time to First Byte", icon: "clock", accent: accents.tfbAccent(pingData.timeToFirstByteMs) },
+            { header: pingData.totalTimeMs, description: "Total Time", icon: "hourglass half", accent: accents.ttAccent(pingData.totalTimeMs) },
         ]
         : [];
 
@@ -124,7 +129,7 @@ function SearchWebsite() {
             </Modal.Content>
             <Modal.Actions style={{ backgroundColor: "#091413", borderTop: "1px solid #2f6d59" }}>
                 <Button onClick={() => setIsModalOpen(false)}>Edit</Button>
-                <Button onClick={() => setIsModalOpen(false)} primary>
+                <Button onClick={() => handleConfirm()} primary>
                     <Icon name="check" />
                     Confirm
                 </Button>
