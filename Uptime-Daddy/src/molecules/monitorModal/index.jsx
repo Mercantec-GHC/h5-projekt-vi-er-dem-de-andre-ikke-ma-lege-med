@@ -5,6 +5,9 @@ import statusIcon from "../../atoms/status/statusIcon";
 import accents from "../../atoms/status/stautsAccent";
 import { API_URL } from "../../util/api.jsx";
 import logo from "../../assets/logo.png";
+import BarChartMonitor from "../../atoms/graphs/barchart.jsx";
+import LineChartMonitor from "../../atoms/graphs/linechart.jsx";
+import { getAuthHeaders } from "../../util/auth.js";
 
 function MonitorModal({ monitor, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +35,7 @@ function MonitorModal({ monitor, onClose }) {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          ...getAuthHeaders(),
         },
       });
 
@@ -45,7 +49,6 @@ function MonitorModal({ monitor, onClose }) {
       window.location.reload();
     }
   };
-
 
   return (
     <>
@@ -67,6 +70,8 @@ function MonitorModal({ monitor, onClose }) {
 
       <Modal.Content style={{ backgroundColor: "#091413" }}>
         <Cards items={items} />
+        <BarChartMonitor data={monitor}/>
+        <LineChartMonitor data={monitor}/>
       </Modal.Content>
 
       <Modal.Actions style={{ backgroundColor: "#091413", borderTop: "1px solid #2f6d59" }}>

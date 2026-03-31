@@ -5,6 +5,7 @@ function statusAccent(code) {
 }
 
 function dnsAccent(dnsTime) {
+    console.log(dnsTime);
     if (dnsTime < 50) return "green";
     if (dnsTime < 150) return "yellow";
     return "red";

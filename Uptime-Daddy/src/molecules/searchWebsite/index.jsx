@@ -5,7 +5,7 @@ import logo from "../../assets/logo.png";
 import statusIcon from "../../atoms/status/statusIcon";
 import accents from "../../atoms/status/stautsAccent";
 import { API_URL } from "../../util/api.jsx";
-import { getAuthPayload } from "../../util/auth";
+import { getAuthHeaders, getAuthPayload } from "../../util/auth";
 
 const MOCK_PING_DATA = {
     statusCode: 200,
@@ -43,11 +43,13 @@ function SearchWebsite() {
                 "userId": userId,
                 "intervalTime": 60,
 		};
+        
 
 		const response = await fetch(`${API_URL}/Websites`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+                ...getAuthHeaders(),
 			},
 			body: JSON.stringify(payload),
 		});

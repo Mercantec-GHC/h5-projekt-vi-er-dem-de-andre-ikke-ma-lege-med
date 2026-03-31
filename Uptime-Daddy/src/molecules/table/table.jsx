@@ -3,7 +3,7 @@ import "./style.css";
 import { Table, Label } from "semantic-ui-react";
 import MonitorModal from "../monitorModal/index.jsx";
 import { API_URL } from "../../util/api.jsx";
-import { getAuthPayload } from "../../util/auth";
+import { getAuthPayload, getAuthHeaders} from "../../util/auth";
 import accents from "../../atoms/status/stautsAccent";
 import logo from "../../assets/logo.png";
 
@@ -22,6 +22,7 @@ function TableComponent() {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
+					...getAuthHeaders(),
 				},
 			});
 

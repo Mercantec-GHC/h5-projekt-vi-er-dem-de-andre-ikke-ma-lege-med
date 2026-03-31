@@ -12,6 +12,7 @@ function Cards({ items = [] }) {
     <Card.Group itemsPerRow={3} stackable className="cards-container">
       {items.map((item, index) => {
         const accent = accentMap[item.accent] ?? accentMap.green;
+        console.log(accent)
         return (
           <Card
             key={`${item.header}-${index}`}
@@ -19,9 +20,6 @@ function Cards({ items = [] }) {
               backgroundColor: "#0f1f1c",
               boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
               borderLeft: `4px solid ${accent.border}`,
-              borderTop: "none",
-              borderRight: "none",
-              borderBottom: "none",
               padding: "0.5em",
             }}
           >
@@ -34,7 +32,7 @@ function Cards({ items = [] }) {
                   <div style={{
                     backgroundColor: accent.iconBg,
                     borderRadius: "0.5rem",
-                    width: "2.5rem",
+                    width : "2.5rem",
                     height: "2.5rem",
                     display: "flex",
                     alignItems: "center",
@@ -48,6 +46,7 @@ function Cards({ items = [] }) {
                 {item.header}
               </CardHeader>
               {item.trend && (
+                console.log(accent.iconColor),
                 <div style={{ marginTop: "0.4rem", fontSize: "0.85rem", color: accent.iconColor }}>
                   {item.trend}
                 </div>
