@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useState }                                                                   from "react";
+import { Link }                                                                       from "react-router-dom";
+import { useNavigate }                                                                from "react-router-dom";
 import { Grid, Segment, Form, Button, Header, Divider, Image, Modal, Input, Message } from "semantic-ui-react";
-import registerImage from "../../assets/loginImage.png";
-import logo from "../../assets/logo.png";
-import { ACCOUNTS_URL } from "../../util/api.jsx";
-import { AUTH_TOKEN_KEY } from "../../util/auth.js";
+import registerImage                                                                  from "../../assets/loginImage.png";
+import logo                                                                           from "../../assets/logo.png";
+import { ACCOUNTS_URL }                                                               from "../../util/api.jsx";
+import { AUTH_TOKEN_KEY }                                                             from "../../util/auth.js";
 
 function Login() {
   const navigate = useNavigate();

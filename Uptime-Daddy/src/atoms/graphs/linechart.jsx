@@ -38,6 +38,7 @@ const LineChartMonitor = (monitor) => {
                             options={metrics}
                             value={selectedMetric}
                             onChange={(e, { value }) => setSelectedMetric(value)}
+                            style={{ backgroundColor: "#0B1D19", border: "1px solid #2f6d59", color: "#B0E4CC" }}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -49,6 +50,8 @@ const LineChartMonitor = (monitor) => {
                             onChange={(e, { value }) => setNumMeasurements(parseInt(value) || 5)}
                             min={1}
                             max={measurements?.length || 10}
+                            style={{ backgroundColor: "#0B1D19", border: "1px solid #2f6d59", color: "#B0E4CC" }}
+                            input={{ style: { backgroundColor: "#0B1D19", color: "#B0E4CC" } }}
                         />
                     </Form.Field>
                 </Form.Group>
@@ -64,8 +67,8 @@ const LineChartMonitor = (monitor) => {
                     }}
                 >
                     <CartesianGrid stroke="#2f6d59" strokeDasharray="3 3" />
-                    <XAxis dataKey="name" stroke="#B0E4CC" />
-                    <YAxis label={{ value: 'Time (ms)', angle: -90, position: 'insideLeft' }} stroke="#B0E4CC" />
+                    <XAxis dataKey="name" stroke="#B0E4CC" tick={{ fill: '#B0E4CC' }} />
+                    <YAxis label={{ value: 'Time (ms)', angle: -90, position: 'insideLeft', fill: '#B0E4CC' }} stroke="#B0E4CC" tick={{ fill: '#B0E4CC' }} />
                     <Tooltip
                         cursor={{
                             stroke: '#2f6d59',
@@ -75,11 +78,13 @@ const LineChartMonitor = (monitor) => {
                             borderColor: '#2f6d59',
                             color: '#B0E4CC',
                         }}
+                        itemStyle={{ color: '#B0E4CC' }}
                     />
                     <Line
                         type="monotone"
                         dataKey="uv"
                         stroke="#2f6d59"
+                        strokeWidth={3}
                         dot={customDot}
                         activeDot={(props) => customDot(props)}
                     />

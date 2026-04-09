@@ -1,13 +1,12 @@
-import { useState,useEffect} from "react";
-import { Container } from "semantic-ui-react";
-import Navbar from "./molecules/navbar/navbar";
-import Table from "./molecules/table/table";
-import Cards from "./atoms/cards/cards";
-import Register from "./pages/register/register";
-import SearchWebsite from "./molecules/searchWebsite";
-import { getAuthPayload, getAuthHeaders } from "./util/auth";
-import { API_URL, fetchCall } from "./util/api.jsx";
-import Loader from "./atoms/loader/loader.jsx";
+import { useState,useEffect} 				from "react";
+import { Container } 						from "semantic-ui-react";
+import Navbar 								from "./molecules/navbar/navbar";
+import Table 								from "./molecules/table/table";
+import Cards 								from "./atoms/cards/cards";
+import Register 							from "./pages/register/register";
+import SearchWebsite 						from "./molecules/searchWebsite";
+import { getAuthPayload, getAuthHeaders } 	from "./util/auth";
+import { API_URL, fetchCall } 				from "./util/api.jsx";
 
 function App() {
 	const [showRegister, setShowRegister] = useState(false);
@@ -24,7 +23,7 @@ function App() {
 				if (item && Array.isArray(item.measurements)) {
 					totalMeasurements += item.measurements.length;
 					const latest = item.measurements[item.measurements.length - 1];
-					if (latest && (latest.status === 200 || latest.statusCode === 200 || latest.status === "200")) {
+					if (latest && (latest.statusCode === 200)) {
 						totalSitesUp += 1;
 					}
 				}
@@ -73,7 +72,6 @@ function App() {
 		<>
 			<Navbar />
 			<Container style={{ marginTop: "7rem", padding: "2rem 0" }}>
-				<Loader isLoading={loading} text="Fetching ping data..." />
 				<SearchWebsite />
 				<Cards items={cards} />
 				<Table />

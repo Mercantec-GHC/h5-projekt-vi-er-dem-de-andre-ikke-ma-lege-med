@@ -1,8 +1,8 @@
 import "./style.css";
-import { Menu, Container, Button, Image } from "semantic-ui-react";
-import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.png";
-import { AUTH_TOKEN_KEY } from "../../util/auth";
+import { Menu, Container, Button, Image }   from "semantic-ui-react";
+import { useNavigate }                      from "react-router-dom";
+import logo                                 from "../../assets/logo.png";
+import { AUTH_TOKEN_KEY }                   from "../../util/auth";
 
 function Navbar() {
     const navigate = useNavigate();

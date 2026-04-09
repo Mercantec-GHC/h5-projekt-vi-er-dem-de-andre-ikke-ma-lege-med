@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Grid, Segment, Form, Button, Header, Divider, Image, Message} from "semantic-ui-react";
-import registerImage from "../../assets/loginImage.png";
-import logo from "../../assets/logo.png";
-import { ACCOUNTS_URL } from "../../util/api.jsx";
+import { useState } 													from "react";
+import { Link } 														from "react-router-dom";
+import { Grid, Segment, Form, Button, Header, Divider, Image, Message} 	from "semantic-ui-react";
+import registerImage 													from "../../assets/loginImage.png";
+import logo 															from "../../assets/logo.png";
+import { ACCOUNTS_URL } 												from "../../util/api.jsx";
 
 
 function Register() {

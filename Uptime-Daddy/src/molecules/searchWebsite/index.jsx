@@ -1,20 +1,11 @@
-import { useState } from "react";
-import { Button, Container, Header, Icon, Input, Modal } from "semantic-ui-react";
-import Cards from "../../atoms/cards/cards";
-import Loader from "../../atoms/loader/loader";
-import statusIcon from "../../atoms/status/statusIcon";
-import accents from "../../atoms/status/stautsAccent";
-import { API_URL } from "../../util/api.jsx";
-import { getAuthHeaders, getAuthPayload } from "../../util/auth";
-
-const MOCK_PING_DATA = {
-    statusCode: 200,
-    dnsLookup: "12ms",
-    connect: "34ms",
-    tlsHandshake: "21ms",
-    ttfb: "89ms",
-    totalTime: "156ms",
-};
+import { useState }                                         from "react";
+import { Button, Container, Header, Icon, Input, Modal }    from "semantic-ui-react";
+import Cards                                                from "../../atoms/cards/cards";
+import Loader                                               from "../../atoms/loader/loader";
+import statusIcon                                           from "../../util/status/statusIcon.jsx";
+import accents                                              from "../../util/status/stautsAccent.jsx";
+import { API_URL }                                          from "../../util/api.jsx";
+import { getAuthHeaders }                                   from "../../util/auth";
 
 function delay(ms) {
     return new Promise((resolve) => {
@@ -27,49 +18,86 @@ function SearchWebsite() {
     const [pingData, setPingData] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const trimmedValue = searchValue.trim();
 
     const handleSearch = async () => {
-        const trimmedValue = searchValue.trim();
 
         if (!trimmedValue) return;
 
         setIsLoading(true);
 
         const payload = {
-				"url":trimmedValue,
-		};
-        
-
-		const response = await fetch(`${API_URL}/Websites/ping`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-                ...getAuthHeaders(),
-			},
-			body: JSON.stringify(payload),
-		});
-
-		if (!response.ok) {
-			throw new Error(
-				`Request failed with status ${response.status}`,
-			);  
-		}
-
-        await delay(1000);
-
-        setPingData({
             url: trimmedValue,
-            ...MOCK_PING_DATA,
-        });
+        };
 
-        setIsLoading(false);
-        setIsModalOpen(true);
+        try {
+            const response = await fetch(`${API_URL}/Websites/ping`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...getAuthHeaders(),
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
+
+            const result = await response.json();
+            await delay(1000);
+
+            setPingData({
+                url: trimmedValue,
+                ...result,
+            });
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
     };
-
-    const handleConfirm = () => {
+    const addWebsite = async () => {
+        if (!trimmedValue) return;
         setIsModalOpen(false);
-        window.location.reload();
+        
+        setIsLoading(true);
+
+        const payload = {
+            url: trimmedValue,
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/Websites`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...getAuthHeaders(),
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
+
+            const result = await response.json();
+            await delay(1000);
+
+            setPingData({
+                url: trimmedValue,
+                ...result,
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+            window.location.reload();
+        }
     };
+
+
 
     const pingCards = pingData
         ? [
@@ -117,9 +145,9 @@ function SearchWebsite() {
             </Modal.Content>
             <Modal.Actions style={{ backgroundColor: "#091413", borderTop: "1px solid #2f6d59" }}>
                 <Button onClick={() => setIsModalOpen(false)}>Edit</Button>
-                <Button onClick={() => handleConfirm()} primary>
+                <Button onClick={() => addWebsite()} primary>
                     <Icon name="check" />
-                    Confirm
+                    Add Website
                 </Button>
             </Modal.Actions>
         </Modal>

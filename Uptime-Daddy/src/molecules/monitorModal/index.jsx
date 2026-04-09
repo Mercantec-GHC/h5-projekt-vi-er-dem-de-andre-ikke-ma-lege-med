@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { Modal, Button } from "semantic-ui-react";
-import Cards from "../../atoms/cards/cards";
-import statusIcon from "../../atoms/status/statusIcon";
-import accents from "../../atoms/status/stautsAccent";
-import { API_URL } from "../../util/api.jsx";
-import BarChartMonitor from "../../atoms/graphs/barchart.jsx";
-import LineChartMonitor from "../../atoms/graphs/linechart.jsx";
-import { getAuthHeaders } from "../../util/auth.js";
-import Loader from "../../atoms/loader/loader.jsx";
+import { useState, useEffect }            from "react";
+import { Modal, Button, Input }           from "semantic-ui-react";
+import Cards                              from "../../atoms/cards/cards";
+import statusIcon                         from "../../util/status/statusIcon.jsx";
+import accents                            from "../../util/status/stautsAccent.jsx";
+import { API_URL }                        from "../../util/api.jsx";
+import BarChartMonitor                    from "../../atoms/graphs/barchart.jsx";
+import LineChartMonitor                   from "../../atoms/graphs/linechart.jsx";
+import { getAuthHeaders, getAuthPayload } from "../../util/auth.js";
+import Loader                             from "../../atoms/loader/loader.jsx";
 
 function MonitorModal({ monitor, onClose }) {
   const [loading, setLoading] = useState(false);
+  const authPayload = getAuthPayload();
+  const [userID, setUserID] = useState(authPayload?.userId);
+  const [editTime, setEditTime] = useState(monitor?.interval || 60); 
+
+  useEffect(() => {
+    setEditTime(monitor?.interval || 60);
+  }, [monitor]);
 
   if (!monitor && !loading) return null;
 
@@ -50,13 +57,53 @@ function MonitorModal({ monitor, onClose }) {
     }
   };
 
+  const handleUpdate = async (website, newTime) => {
+    onClose();
+    setLoading(true);
+    console.log(userID)
+
+    try {
+      const response = await fetch(`${API_URL}/Websites/${website.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify({ interval: newTime }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } finally {
+      setLoading(false);
+      window.location.reload();
+    }
+  };
+
   return (
     <>
     <Loader isLoading={loading} text="Deleting website..." />
     {monitor && (
     <Modal open={Boolean(monitor)} onClose={onClose} size="large">
-      <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59" }}>
-        {monitor.url}
+      <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span>Monitor Details</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Input
+            size="small"
+            type="number"
+            value={editTime}
+            onChange={(e) => setEditTime(Number(e.target.value))}
+            placeholder="Interval (ms)"
+            style={{ width: "140px", backgroundColor: "#0B1D19", border: "1px solid #2f6d59", borderRadius: "6px", color: "#B0E4CC" }}
+            input={{ style: { backgroundColor: "#0B1D19", color: "#B0E4CC", borderRadius: "6px", padding: "10px" } }}
+          />
+          <Button onClick={() => handleUpdate(monitor, editTime)} primary disabled={loading} style={{ minHeight: "47px", backgroundColor: "#1F8B68", borderColor: "#2f6d59" }}>
+            Save
+          </Button>
+        </div>
       </Modal.Header>
 
       <Modal.Content style={{ backgroundColor: "#091413" }}>

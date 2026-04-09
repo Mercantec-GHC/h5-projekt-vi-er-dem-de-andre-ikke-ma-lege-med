@@ -1,4 +1,4 @@
-import accents from "../atoms/status/stautsAccent";
+import accents from "./status/stautsAccent";
 
 const metricOptions = [
 	{ key: "dnsLookupMs", text: "DNS Lookup", value: "dnsLookupMs" },

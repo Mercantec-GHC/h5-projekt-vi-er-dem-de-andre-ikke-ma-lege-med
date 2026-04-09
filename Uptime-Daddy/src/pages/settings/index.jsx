@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Button, Container, Form, Header, Segment } from "semantic-ui-react";
-import Navbar from "../../molecules/navbar/navbar";
-import { getAuthPayload } from "../../util/auth";
-import "./style.css";
+import { useState }                                     from "react";
+import { Button, Container, Form, Header, Segment }     from "semantic-ui-react";
+import Navbar                                           from "../../molecules/navbar/navbar";
+import { getAuthPayload }                               from "../../util/auth";
+import                                                       "./style.css";
 
 function getfullNameFromPayload(payload) {
     if (!payload) return "-";

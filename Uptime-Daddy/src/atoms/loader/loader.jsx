@@ -1,6 +1,6 @@
 import logo from "../../assets/logo.png";
 
-function Loader({ isLoading, text = "Loading..." }) {
+function Loader({ isLoading, text = "" }) {
     if (!isLoading) return null;
 
     return (

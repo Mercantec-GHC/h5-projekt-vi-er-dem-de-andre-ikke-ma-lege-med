@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import "./style.css";
-import { Table, Label } from "semantic-ui-react";
-import MonitorModal from "../monitorModal/index.jsx";
-import { API_URL } from "../../util/api.jsx";
-import { getAuthPayload, getAuthHeaders} from "../../util/auth";
-import accents from "../../atoms/status/stautsAccent";
-import Loader from "../../atoms/loader/loader.jsx";
+import { useState, useEffect } 				from "react";
+import 										"./style.css";
+import { Table, Label } 					from "semantic-ui-react";
+import MonitorModal 						from "../monitorModal/index.jsx";
+import { API_URL } 							from "../../util/api.jsx";
+import { getAuthPayload, getAuthHeaders} 	from "../../util/auth";
+import accents 								from "../../util/status/stautsAccent.jsx";
+import Loader 								from "../../atoms/loader/loader.jsx";
 
 function TableComponent() {
 	const [selected, setSelected] = useState(null);

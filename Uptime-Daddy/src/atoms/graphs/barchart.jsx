@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, CartesianGrid, Tooltip } from 'recharts';
 import { Segment, Form } from "semantic-ui-react";
 import { useState } from 'react';
 import { Dropdown, Input } from 'semantic-ui-react';
@@ -35,6 +35,7 @@ const BarChartMonitor = (monitor) => {
                             options={metrics}
                             value={selectedMetric}
                             onChange={(e, { value }) => setSelectedMetric(value)}
+                            style={{ backgroundColor: "#0B1D19", border: "1px solid #2f6d59", color: "#B0E4CC" }}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -46,14 +47,22 @@ const BarChartMonitor = (monitor) => {
                             onChange={(e, { value }) => setNumMeasurements(parseInt(value) || 5)}
                             min={1}
                             max={measurements?.length || 10}
+                            style={{ backgroundColor: "#0B1D19", border: "1px solid #2f6d59", color: "#B0E4CC" }}
+                            input={{ style: { backgroundColor: "#0B1D19", color: "#B0E4CC" } }}
                         />
                     </Form.Field>
                 </Form.Group>
             </Form>
             <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={data}>
-                    <XAxis dataKey="name" />
-                    <YAxis label={{ value: 'Time (ms)', angle: -90, position: 'insideLeft' }} />
+                    <CartesianGrid stroke="#2f6d59" strokeDasharray="3 3" />
+                    <XAxis dataKey="name" stroke="#B0E4CC" tick={{ fill: '#B0E4CC' }} />
+                    <YAxis label={{ value: 'Time (ms)', angle: -90, position: 'insideLeft', fill: '#B0E4CC' }} stroke="#B0E4CC" tick={{ fill: '#B0E4CC' }} />
+                    <Tooltip
+                        cursor={{ stroke: '#2f6d59' }}
+                        contentStyle={{ backgroundColor: '#091413', borderColor: '#2f6d59', color: '#B0E4CC' }}
+                        itemStyle={{ color: '#B0E4CC' }}
+                    />
                     <Bar dataKey="uv" label={renderCustomBarLabel}>
                         {data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
