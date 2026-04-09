@@ -4,15 +4,15 @@ import Cards from "../../atoms/cards/cards";
 import statusIcon from "../../atoms/status/statusIcon";
 import accents from "../../atoms/status/stautsAccent";
 import { API_URL } from "../../util/api.jsx";
-import logo from "../../assets/logo.png";
 import BarChartMonitor from "../../atoms/graphs/barchart.jsx";
 import LineChartMonitor from "../../atoms/graphs/linechart.jsx";
 import { getAuthHeaders } from "../../util/auth.js";
+import Loader from "../../atoms/loader/loader.jsx";
 
 function MonitorModal({ monitor, onClose }) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  if (!monitor && !isLoading) return null;
+  if (!monitor && !loading) return null;
 
   const latest = monitor?.measurements?.at(-1);
 
@@ -28,7 +28,7 @@ function MonitorModal({ monitor, onClose }) {
 
   const handleDelete = async (website) => {
     onClose();
-    setIsLoading(true);
+    setLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/Websites/${website.id}`, {
@@ -45,23 +45,14 @@ function MonitorModal({ monitor, onClose }) {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
-      setIsLoading(false);
+      setLoading(false);
       window.location.reload();
     }
   };
 
   return (
     <>
-      {isLoading && (
-          <div className="global-spinner-overlay">
-              <img
-                  src={logo}
-                  alt="Loading"
-                  className="global-spinner-logo"
-              />
-              <span className="global-spinner-text">Deleting website...</span>
-          </div>
-      )}
+    <Loader isLoading={loading} text="Deleting website..." />
     {monitor && (
     <Modal open={Boolean(monitor)} onClose={onClose} size="large">
       <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59" }}>
@@ -78,7 +69,7 @@ function MonitorModal({ monitor, onClose }) {
         <Button onClick={onClose}>
           Close
         </Button>
-        <Button onClick={() => handleDelete(monitor)} negative disabled={isLoading}>
+        <Button onClick={() => handleDelete(monitor)} negative disabled={loading}>
           Slet Website
         </Button>
       </Modal.Actions>

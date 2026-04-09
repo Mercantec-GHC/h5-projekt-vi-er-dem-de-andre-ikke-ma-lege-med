@@ -1,47 +1,58 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Segment } from 'semantic-ui-react';
-import accents from "../../atoms/status/stautsAccent";
+import { Segment, Form } from 'semantic-ui-react';
+import { useState } from 'react';
+import { Dropdown, Input } from 'semantic-ui-react';
+import helpers from "../../util/helpers";
+const { metricOptions: metrics, metricMap, colorMap: colors, getAccentFunc } = helpers;
 
 const LineChartMonitor = (monitor) => {
     const { measurements } = monitor.data || {};
-    const latest = measurements?.at(-1);
+    const [selectedMetric, setSelectedMetric] = useState('totalTimeMs');
+    const [numMeasurements, setNumMeasurements] = useState(5);
     
-    const colorMap = {
-        green: "#408A71",
-        yellow: "#FFD700",
-        red: "#DC143C"
-    };
-    
-    const getAccentFunc = (name) => {
-        switch (name) {
-            case 'DNS Lookup': return accents.dnsAccent;
-            case 'Connect': return accents.connectAccent;
-            case 'TLS Handshake': return accents.tlsAccent;
-            case 'Time to First Byte': return accents.tfbAccent;
-            case 'Total Time': return accents.ttAccent;
-            default: return () => "green";
-        }
-    };
-    
-    const data = [
-        { name: 'DNS Lookup', uv: latest?.dnsLookupMs ?? 0 },
-        { name: 'Connect', uv: latest?.connectMs ?? 0 },
-        { name: 'TLS Handshake', uv: latest?.tlsHandshakeMs ?? 0 },
-        { name: 'Time to First Byte', uv: latest?.timeToFirstByteMs ?? 0 },
-        { name: 'Total Time', uv: latest?.totalTimeMs ?? 0 },
-    ];
+    const accentFunc = getAccentFunc(metricMap[selectedMetric]);
+    const recentMeasurements = measurements?.slice(-numMeasurements) || [];
+    const data = recentMeasurements.map((m, i) => ({
+        name: `M${i+1}`,
+        uv: m[selectedMetric] ?? 0
+    }));
 
     const customDot = (props) => {
         const { payload } = props;
-        const accentFunc = getAccentFunc(payload.name);
         const accent = accentFunc(payload.uv);
-        const fillColor = colorMap[accent];
+        const fillColor = colors[accent];
         return <circle {...props} fill={fillColor} />;
     };
 
     return (
         <Segment inverted style={{ marginTop: "2em", backgroundColor: "#091413", border: "1px solid #2f6d59" }}>
             <h3 style={{ color: "#B0E4CC", marginBottom: "0.5em" }}>Performance Metrics</h3>
+            <Form inverted>
+                <Form.Group widths='equal'>
+                    <Form.Field>
+                        <label style={{ color: "#B0E4CC" }}>Select Metric</label>
+                        <Dropdown
+                            placeholder='Select metric'
+                            fluid
+                            selection
+                            options={metrics}
+                            value={selectedMetric}
+                            onChange={(e, { value }) => setSelectedMetric(value)}
+                        />
+                    </Form.Field>
+                    <Form.Field>
+                        <label style={{ color: "#B0E4CC" }}>Number of Measurements</label>
+                        <Input
+                            type="number"
+                            placeholder="Number of measurements"
+                            value={numMeasurements}
+                            onChange={(e, { value }) => setNumMeasurements(parseInt(value) || 5)}
+                            min={1}
+                            max={measurements?.length || 10}
+                        />
+                    </Form.Field>
+                </Form.Group>
+            </Form>
             <ResponsiveContainer width="100%" height={250}>
                 <LineChart
                     data={data}

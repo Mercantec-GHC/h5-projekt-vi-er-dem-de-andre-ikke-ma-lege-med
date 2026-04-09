@@ -12,7 +12,6 @@ function Cards({ items = [] }) {
     <Card.Group itemsPerRow={3} stackable className="cards-container">
       {items.map((item, index) => {
         const accent = accentMap[item.accent] ?? accentMap.green;
-        console.log(accent)
         return (
           <Card
             key={`${item.header}-${index}`}

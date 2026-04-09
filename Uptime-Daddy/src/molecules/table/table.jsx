@@ -5,7 +5,7 @@ import MonitorModal from "../monitorModal/index.jsx";
 import { API_URL } from "../../util/api.jsx";
 import { getAuthPayload, getAuthHeaders} from "../../util/auth";
 import accents from "../../atoms/status/stautsAccent";
-import logo from "../../assets/logo.png";
+import Loader from "../../atoms/loader/loader.jsx";
 
 function TableComponent() {
 	const [selected, setSelected] = useState(null);
@@ -48,16 +48,7 @@ function TableComponent() {
 
 	return (
 		<>
-			{loading && (
-				<div className="global-spinner-overlay">
-					<img
-						src={logo}
-						alt="Loading"
-						className="global-spinner-logo"
-					/>
-					<span className="global-spinner-text">Loading websites...</span>
-				</div>
-			)}
+			<Loader isLoading={loading} text="Loading websites..." />
 			<Table celled selectable className="monitor-table">
 				<Table.Header>
 					<Table.Row>

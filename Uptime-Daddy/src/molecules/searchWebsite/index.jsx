@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Container, Header, Icon, Input, Modal } from "semantic-ui-react";
 import Cards from "../../atoms/cards/cards";
-import logo from "../../assets/logo.png";
+import Loader from "../../atoms/loader/loader";
 import statusIcon from "../../atoms/status/statusIcon";
 import accents from "../../atoms/status/stautsAccent";
 import { API_URL } from "../../util/api.jsx";
@@ -35,17 +35,12 @@ function SearchWebsite() {
 
         setIsLoading(true);
 
-        const authPayload = getAuthPayload();
-        const userId = authPayload?.userId;
-
         const payload = {
 				"url":trimmedValue,
-                "userId": userId,
-                "intervalTime": 60,
 		};
         
 
-		const response = await fetch(`${API_URL}/Websites`, {
+		const response = await fetch(`${API_URL}/Websites/ping`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -112,16 +107,7 @@ function SearchWebsite() {
             </div>
             <p style={{ color: "#408A71" }}>Input your website here to add it to your list on montired webistes</p>
         </Container>
-        {isLoading && (
-            <div className="global-spinner-overlay">
-                <img
-                    src={logo}
-                    alt="Loading"
-                    className="global-spinner-logo"
-                />
-                <span className="global-spinner-text">Fetching ping data...</span>
-            </div>
-        )}
+        <Loader isLoading={isLoading} text="Fetching ping data..." />
         <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} size="large">
             <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59" }}>
                 {pingData?.url}               
