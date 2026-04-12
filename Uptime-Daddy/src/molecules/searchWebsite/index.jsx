@@ -6,6 +6,7 @@ import statusIcon                                           from "../../util/sta
 import accents                                              from "../../util/status/stautsAccent.jsx";
 import { API_URL }                                          from "../../util/api.jsx";
 import { getAuthHeaders }                                   from "../../util/auth";
+import { refreshPage }                                      from "../../util/pageRefresh.js";
 
 function delay(ms) {
     return new Promise((resolve) => {
@@ -93,7 +94,7 @@ function SearchWebsite() {
             console.error(error);
         } finally {
             setIsLoading(false);
-            window.location.reload();
+            refreshPage();
         }
     };
 

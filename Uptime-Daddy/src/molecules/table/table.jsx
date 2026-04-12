@@ -1,13 +1,14 @@
 import { useState, useEffect } 				from "react";
 import 										"./style.css";
-import { Table, Label } 					from "semantic-ui-react";
+import { Table, Label, Icon } 				from "semantic-ui-react";
 import MonitorModal 						from "../monitorModal/index.jsx";
 import { API_URL } 							from "../../util/api.jsx";
 import { getAuthPayload, getAuthHeaders} 	from "../../util/auth";
 import accents 								from "../../util/status/stautsAccent.jsx";
 import Loader 								from "../../atoms/loader/loader.jsx";
 
-function TableComponent() {
+
+function TableComponent({ refreshSignal = 0, onDataChanged }) {
 	const [selected, setSelected] = useState(null);
 	const [loading, setLoading] = useState(false);
   	const [websiteData, setWebsiteData] = useState([]);
@@ -43,8 +44,9 @@ function TableComponent() {
 	};
 
 	useEffect(() => {
+		if (!userId) return;
 		fetchWebsiteData();
-	}, []);
+	}, [userId, refreshSignal]);
 
 	return (
 		<>
@@ -64,14 +66,30 @@ function TableComponent() {
 
 				<Table.Body>
 				{websiteData.map((m) => {
-					const latest = m.measurements?.at(-1);
+					const latest = m.measurements[0];
+					const faviconSrc = m.faviconBase64 ? `data:image/x-icon;base64,${m.faviconBase64}` : null;
 					return (
 					<Table.Row
 						key={m.id}
 						onClick={() => setSelected(m)}
 						style={{ cursor: "pointer" }}
 					>
-						<Table.Cell>{m.url}</Table.Cell>
+						<Table.Cell>
+							<div className="url-cell-content">
+								{faviconSrc ? (
+									<img
+										src={faviconSrc}
+										alt={`${m.url} favicon`}
+										className="favicon-icon"
+									/>
+								) : (
+									<span className="favicon-placeholder" >
+										<Icon name="file image outline" />
+									</span>
+								)}
+								<span>{m.url}</span>
+							</div>
+						</Table.Cell>
 						<Table.Cell>
 						<Label color={accents.statusAccent(latest?.statusCode)}>
 							{latest?.statusCode ?? "-"}
@@ -91,6 +109,7 @@ function TableComponent() {
 			<MonitorModal
 				monitor={selected}
 				onClose={() => setSelected(null)}
+				onDataChanged={onDataChanged}
 			/>
 		</>
 	);

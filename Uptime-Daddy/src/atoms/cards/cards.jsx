@@ -45,7 +45,6 @@ function Cards({ items = [] }) {
                 {item.header}
               </CardHeader>
               {item.trend && (
-                console.log(accent.iconColor),
                 <div style={{ marginTop: "0.4rem", fontSize: "0.85rem", color: accent.iconColor }}>
                   {item.trend}
                 </div>

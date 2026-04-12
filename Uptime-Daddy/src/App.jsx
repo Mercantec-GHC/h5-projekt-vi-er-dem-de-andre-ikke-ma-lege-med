@@ -13,6 +13,7 @@ function App() {
 	const [cards, setCards] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [refreshSignal, setRefreshSignal] = useState(0);
 
 
 	function calculateCards(amountOfWebsites, amountOfMeasurements) {
@@ -22,7 +23,7 @@ function App() {
 			for (const item of amountOfMeasurements) {
 				if (item && Array.isArray(item.measurements)) {
 					totalMeasurements += item.measurements.length;
-					const latest = item.measurements[item.measurements.length - 1];
+					const latest = item.measurements[0];
 					if (latest && (latest.statusCode === 200)) {
 						totalSitesUp += 1;
 					}
@@ -46,6 +47,10 @@ function App() {
 
 		const authPayload = getAuthPayload();
         const userId = authPayload?.userId;
+
+		const handleWebsiteDataChanged = () => {
+			setRefreshSignal((previous) => previous + 1);
+		};
 		
 		useEffect(() => {
 			if (!userId) return;
@@ -66,15 +71,15 @@ function App() {
 			};
 
 		loadData();
-		}, [userId]);
+		}, [userId, refreshSignal]);
 
 	return (
 		<>
 			<Navbar />
 			<Container style={{ marginTop: "7rem", padding: "2rem 0" }}>
-				<SearchWebsite />
+				<SearchWebsite onWebsiteAdded={handleWebsiteDataChanged} />
 				<Cards items={cards} />
-				<Table />
+				<Table refreshSignal={refreshSignal} onDataChanged={handleWebsiteDataChanged} />
 			</Container>
 		</>
 	);

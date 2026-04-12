@@ -5,15 +5,15 @@ import { Dropdown, Input } from 'semantic-ui-react';
 import helpers from "../../util/helpers";
 const { metricOptions: metrics, metricMap, colorMap: colors, getAccentFunc } = helpers;
 
-const LineChartMonitor = (monitor) => {
-    const { measurements } = monitor.data || {};
+const LineChartMonitor = ({ data }) => {
+    const { measurements } = data;
     const [selectedMetric, setSelectedMetric] = useState('totalTimeMs');
     const [numMeasurements, setNumMeasurements] = useState(5);
-    
+
     const accentFunc = getAccentFunc(metricMap[selectedMetric]);
-    const recentMeasurements = measurements?.slice(-numMeasurements) || [];
-    const data = recentMeasurements.map((m, i) => ({
-        name: `M${i+1}`,
+    const recentMeasurements = measurements.slice(0, numMeasurements);
+    const dataPoints = recentMeasurements.map((m, i) => ({
+        name: `M${i + 1}`,
         uv: m[selectedMetric] ?? 0
     }));
 
@@ -49,7 +49,7 @@ const LineChartMonitor = (monitor) => {
                             value={numMeasurements}
                             onChange={(e, { value }) => setNumMeasurements(parseInt(value) || 5)}
                             min={1}
-                            max={measurements?.length || 10}
+                            max={measurements.length}
                             style={{ backgroundColor: "#0B1D19", border: "1px solid #2f6d59", color: "#B0E4CC" }}
                             input={{ style: { backgroundColor: "#0B1D19", color: "#B0E4CC" } }}
                         />
@@ -58,7 +58,7 @@ const LineChartMonitor = (monitor) => {
             </Form>
             <ResponsiveContainer width="100%" height={250}>
                 <LineChart
-                    data={data}
+                    data={dataPoints}
                     margin={{
                         top: 5,
                         right: 0,

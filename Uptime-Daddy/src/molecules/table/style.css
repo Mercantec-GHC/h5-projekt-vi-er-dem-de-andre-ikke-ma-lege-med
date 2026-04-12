@@ -39,3 +39,32 @@
   color: #fff !important;
   border-color: #408A71 !important;
 }
+
+.monitor-table .url-cell-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.monitor-table .favicon-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.monitor-table .favicon-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  width: 16px;
+  color: #5c7a70;
+  flex-shrink: 0;
+}
+
+.monitor-table .favicon-placeholder i.icon {
+  margin: 0;
+  font-size: 16px;
+}

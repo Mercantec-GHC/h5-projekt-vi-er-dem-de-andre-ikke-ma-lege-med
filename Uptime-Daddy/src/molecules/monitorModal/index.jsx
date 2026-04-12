@@ -6,35 +6,41 @@ import accents                            from "../../util/status/stautsAccent.j
 import { API_URL }                        from "../../util/api.jsx";
 import BarChartMonitor                    from "../../atoms/graphs/barchart.jsx";
 import LineChartMonitor                   from "../../atoms/graphs/linechart.jsx";
-import { getAuthHeaders, getAuthPayload } from "../../util/auth.js";
+import { getAuthHeaders }                 from "../../util/auth.js";
+import { refreshPage }                    from "../../util/pageRefresh.js";
 import Loader                             from "../../atoms/loader/loader.jsx";
 
 function MonitorModal({ monitor, onClose }) {
   const [loading, setLoading] = useState(false);
-  const authPayload = getAuthPayload();
-  const [userID, setUserID] = useState(authPayload?.userId);
-  const [editTime, setEditTime] = useState(monitor?.interval || 60); 
+
+  const getMonitorInterval = (website) => {
+    if (!website) return 60;
+    return Number(website.intervalTime ?? 60);
+  };
+
+  const [editTime, setEditTime] = useState(() => getMonitorInterval(monitor));
 
   useEffect(() => {
-    setEditTime(monitor?.interval || 60);
+    if (monitor) {
+      setEditTime(getMonitorInterval(monitor));
+    }
   }, [monitor]);
 
   if (!monitor && !loading) return null;
 
-  const latest = monitor?.measurements?.at(-1);
+  const latest = monitor.measurements[0];
 
   const items = [
     { header: latest ? String(latest.statusCode) : "-",                                   description: "Status Code",         icon: statusIcon(latest?.statusCode), accent: accents.statusAccent(latest?.statusCode) },
-    { header: latest?.dnsLookupMs != null ? `${latest.dnsLookupMs}ms` : "-",              description: "DNS Lookup",          icon: "search",                       accent: accents.dnsAccent("dnsLookup", latest?.dnsLookupMs) },
-    { header: latest?.connectMs != null ? `${latest.connectMs}ms` : "-",                  description: "Connect",             icon: "plug",                         accent: accents.connectAccent("connect", latest?.connectMs) },
-    { header: latest?.tlsHandshakeMs != null ? `${latest.tlsHandshakeMs}ms` : "-",        description: "TLS Handshake",       icon: "lock",                         accent: accents.tlsAccent("tlsHandshake", latest?.tlsHandshakeMs) },
-    { header: latest?.timeToFirstByteMs != null ? `${latest.timeToFirstByteMs}ms` : "-",  description: "Time to First Byte",  icon: "clock",                        accent: accents.tfbAccent("timeToFirstByte", latest?.timeToFirstByteMs) },
-    { header: latest?.totalTimeMs != null ? `${latest.totalTimeMs}ms` : "-",              description: "Total Time",          icon: "hourglass half",               accent: accents.ttAccent("totalTime", latest?.totalTimeMs) },
+    { header: latest?.dnsLookupMs != null ? `${latest.dnsLookupMs}ms` : "-",              description: "DNS Lookup",          icon: "search",                       accent: accents.dnsAccent(latest?.dnsLookupMs) },
+    { header: latest?.connectMs != null ? `${latest.connectMs}ms` : "-",                  description: "Connect",             icon: "plug",                         accent: accents.connectAccent(latest?.connectMs) },
+    { header: latest?.tlsHandshakeMs != null ? `${latest.tlsHandshakeMs}ms` : "-",        description: "TLS Handshake",       icon: "lock",                         accent: accents.tlsAccent(latest?.tlsHandshakeMs) },
+    { header: latest?.timeToFirstByteMs != null ? `${latest.timeToFirstByteMs}ms` : "-",  description: "Time to First Byte",  icon: "clock",                        accent: accents.tfbAccent(latest?.timeToFirstByteMs) },
+    { header: latest?.totalTimeMs != null ? `${latest.totalTimeMs}ms` : "-",              description: "Total Time",          icon: "hourglass half",               accent: accents.ttAccent(latest?.totalTimeMs) },
   ];
 
 
   const handleDelete = async (website) => {
-    onClose();
     setLoading(true);
 
     try {
@@ -53,41 +59,51 @@ function MonitorModal({ monitor, onClose }) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
       setLoading(false);
-      window.location.reload();
+      onClose();
+      refreshPage();
+
     }
   };
 
   const handleUpdate = async (website, newTime) => {
-    onClose();
     setLoading(true);
-    console.log(userID)
+    const payload = { intervalTime: String(newTime) };
+    let updateSucceeded = false;
 
     try {
-      const response = await fetch(`${API_URL}/Websites/${website.id}`, {
+      const response = await fetch(`${API_URL}/Websites/${website.id}/interval`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           ...getAuthHeaders(),
         },
-        body: JSON.stringify({ interval: newTime }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status}`);
       }
 
+      setEditTime(newTime);
+      updateSucceeded = true;
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
       setLoading(false);
-      window.location.reload();
+      onClose();
+      if (updateSucceeded) {
+        refreshPage();
+      }
+
     }
   };
 
   return (
     <>
-    <Loader isLoading={loading} text="Deleting website..." />
+    <Loader isLoading={loading} text="Updating intervaltime..." />
     {monitor && (
     <Modal open={Boolean(monitor)} onClose={onClose} size="large">
+      <Loader isLoading={loading} text="Deleting website..." />
       <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span>Monitor Details</span>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

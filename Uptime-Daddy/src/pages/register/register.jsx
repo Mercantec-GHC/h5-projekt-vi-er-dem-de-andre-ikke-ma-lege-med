@@ -4,6 +4,8 @@ import { Grid, Segment, Form, Button, Header, Divider, Image, Message} 	from "se
 import registerImage 													from "../../assets/loginImage.png";
 import logo 															from "../../assets/logo.png";
 import { ACCOUNTS_URL } 												from "../../util/api.jsx";
+import { useNavigate }                                                  from "react-router-dom";
+
 
 
 function Register() {
@@ -13,6 +15,7 @@ function Register() {
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [successMessage, setSuccessMessage] = useState("");
+	const navigate = useNavigate();
 
 	const handleRegister = async () => {
 		setLoading(true);
@@ -56,9 +59,7 @@ function Register() {
 			}
 		} finally {
 			setLoading(false);
-			setFullName("");
-			setEmail("");
-			setPassword("");
+			navigate("/login");
 		}
 	};
 

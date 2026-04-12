@@ -18,7 +18,6 @@ function Login() {
   const [successMessage, setSuccessMessage] = useState("");
 
   const sendReset = () => {
-    console.log("Password reset requested for", resetEmail);
     setResetMode(false);
   };
 
