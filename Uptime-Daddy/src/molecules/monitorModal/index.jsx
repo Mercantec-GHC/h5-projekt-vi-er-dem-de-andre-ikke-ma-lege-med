@@ -100,10 +100,9 @@ function MonitorModal({ monitor, onClose }) {
 
   return (
     <>
-    <Loader isLoading={loading} text="Updating intervaltime..." />
     {monitor && (
     <Modal open={Boolean(monitor)} onClose={onClose} size="large">
-      <Loader isLoading={loading} text="Deleting website..." />
+      <Loader isLoading={loading} text="Updating website list..." />
       <Modal.Header style={{ backgroundColor: "#091413", color: "#408A71", borderBottom: "1px solid #2f6d59", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span>Monitor Details</span>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

@@ -45,7 +45,6 @@ function Settings() {
 
                         <div className="settings-actions">
                             <Button>Save</Button>
-                            <Button>Reset</Button>
                         </div>
 
                     </Form>
