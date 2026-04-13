@@ -5,7 +5,7 @@ import Table 								from "./molecules/table/table";
 import Cards 								from "./atoms/cards/cards";
 import Register 							from "./pages/register/register";
 import SearchWebsite 						from "./molecules/searchWebsite";
-import { getAuthPayload, getAuthHeaders } 	from "./util/auth";
+import { getAuthPayload } 					from "./util/auth";
 import { API_URL, fetchCall } 				from "./util/api.jsx";
 
 function App() {
@@ -59,8 +59,8 @@ function App() {
 				try {
 					setLoading(true);
 					const [amountOfWebsites, amountOfMeasurements] = await Promise.all([
-					fetchCall({ url:`${API_URL}/Websites/user/${userId}`, headers: getAuthHeaders() }),
-					fetchCall({ url:`${API_URL}/Websites/user/${userId}/with-measurements`, headers: getAuthHeaders() }),
+					fetchCall({ url:`${API_URL}/Websites/user/${userId}` }),
+					fetchCall({ url:`${API_URL}/Websites/user/${userId}/with-measurements` }),
 				]);
 					setCards(calculateCards(amountOfWebsites, amountOfMeasurements));
 				} catch (err) {

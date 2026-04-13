@@ -4,9 +4,7 @@ import Cards                                                from "../../atoms/ca
 import Loader                                               from "../../atoms/loader/loader";
 import statusIcon                                           from "../../util/status/statusIcon.jsx";
 import accents                                              from "../../util/status/stautsAccent.jsx";
-import { API_URL }                                          from "../../util/api.jsx";
-import { getAuthHeaders }                                   from "../../util/auth";
-import { refreshPage }                                      from "../../util/pageRefresh.js";
+import { API_URL, fetchCall }                               from "../../util/api.jsx";
 
 function delay(ms) {
     return new Promise((resolve) => {
@@ -14,7 +12,7 @@ function delay(ms) {
     });
 }
 
-function SearchWebsite() {
+function SearchWebsite({ onWebsiteAdded }) {
     const [searchValue, setSearchValue] = useState("");
     const [pingData, setPingData] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,20 +30,11 @@ function SearchWebsite() {
         };
 
         try {
-            const response = await fetch(`${API_URL}/Websites/ping`, {
+            const result = await fetchCall({
+                url: `${API_URL}/Websites/ping`,
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    ...getAuthHeaders(),
-                },
-                body: JSON.stringify(payload),
+                body: payload,
             });
-
-            if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}`);
-            }
-
-            const result = await response.json();
             await delay(1000);
 
             setPingData({
@@ -70,20 +59,11 @@ function SearchWebsite() {
         };
 
         try {
-            const response = await fetch(`${API_URL}/Websites`, {
+            const result = await fetchCall({
+                url: `${API_URL}/Websites`,
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    ...getAuthHeaders(),
-                },
-                body: JSON.stringify(payload),
+                body: payload,
             });
-
-            if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}`);
-            }
-
-            const result = await response.json();
             await delay(1000);
 
             setPingData({
@@ -94,7 +74,7 @@ function SearchWebsite() {
             console.error(error);
         } finally {
             setIsLoading(false);
-            refreshPage();
+            onWebsiteAdded?.();
         }
     };
 

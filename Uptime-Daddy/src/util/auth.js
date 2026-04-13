@@ -1,11 +1,38 @@
-const AUTH_TOKEN_KEY = "authToken";
+const ACCESS_TOKEN_KEY = "accessToken";
+const REFRESH_TOKEN_KEY = "refreshToken";
+const AUTH_TOKEN_KEY = ACCESS_TOKEN_KEY;
 
 function getAuthToken() {
-  return localStorage.getItem(AUTH_TOKEN_KEY);
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+function getAccessToken() {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+function getRefreshToken() {
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
 }
 
 function hasAuthToken() {
-  return Boolean(getAuthToken());
+  return Boolean(getAccessToken());
+}
+
+function setAuthTokens({ accessToken, refreshToken }) {
+  if (accessToken) {
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  } else {
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+  }
+
+  if (refreshToken) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+  }
+}
+
+function clearAuthTokens() {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
 }
 
 function parseJwtPayload(token) {
@@ -26,12 +53,25 @@ function parseJwtPayload(token) {
 }
 
 function getAuthPayload() {
-  return parseJwtPayload(getAuthToken());
+  return parseJwtPayload(getAccessToken());
 }
 
 function getAuthHeaders() {
-  const token = getAuthToken();
+  const token = getAccessToken();
   return token ? { "Authorization": `Bearer ${token}` } : {};
 }
 
-export { AUTH_TOKEN_KEY, getAuthToken, hasAuthToken, getAuthPayload, parseJwtPayload, getAuthHeaders };
+export {
+  ACCESS_TOKEN_KEY,
+  AUTH_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  getAuthToken,
+  getAccessToken,
+  getRefreshToken,
+  hasAuthToken,
+  setAuthTokens,
+  clearAuthTokens,
+  getAuthPayload,
+  parseJwtPayload,
+  getAuthHeaders,
+};

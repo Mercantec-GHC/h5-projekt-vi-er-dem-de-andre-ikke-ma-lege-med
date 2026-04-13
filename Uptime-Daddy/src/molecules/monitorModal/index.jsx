@@ -3,14 +3,12 @@ import { Modal, Button, Input }           from "semantic-ui-react";
 import Cards                              from "../../atoms/cards/cards";
 import statusIcon                         from "../../util/status/statusIcon.jsx";
 import accents                            from "../../util/status/stautsAccent.jsx";
-import { API_URL }                        from "../../util/api.jsx";
+import { API_URL, fetchCall }             from "../../util/api.jsx";
 import BarChartMonitor                    from "../../atoms/graphs/barchart.jsx";
 import LineChartMonitor                   from "../../atoms/graphs/linechart.jsx";
-import { getAuthHeaders }                 from "../../util/auth.js";
-import { refreshPage }                    from "../../util/pageRefresh.js";
 import Loader                             from "../../atoms/loader/loader.jsx";
 
-function MonitorModal({ monitor, onClose }) {
+function MonitorModal({ monitor, onClose, onDataChanged }) {
   const [loading, setLoading] = useState(false);
 
   const getMonitorInterval = (website) => {
@@ -42,26 +40,23 @@ function MonitorModal({ monitor, onClose }) {
 
   const handleDelete = async (website) => {
     setLoading(true);
+    let deleteSucceeded = false;
 
     try {
-      const response = await fetch(`${API_URL}/Websites/${website.id}`, {
+      await fetchCall({
+        url: `${API_URL}/Websites/${website.id}`,
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeaders(),
-        },
       });
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      deleteSucceeded = true;
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
       setLoading(false);
       onClose();
-      refreshPage();
-
+      if (deleteSucceeded) {
+        onDataChanged?.();
+      }
     }
   };
 
@@ -71,18 +66,11 @@ function MonitorModal({ monitor, onClose }) {
     let updateSucceeded = false;
 
     try {
-      const response = await fetch(`${API_URL}/Websites/${website.id}/interval`, {
+      await fetchCall({
+        url: `${API_URL}/Websites/${website.id}/interval`,
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeaders(),
-        },
-        body: JSON.stringify(payload),
+        body: payload,
       });
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
 
       setEditTime(newTime);
       updateSucceeded = true;
@@ -92,7 +80,7 @@ function MonitorModal({ monitor, onClose }) {
       setLoading(false);
       onClose();
       if (updateSucceeded) {
-        refreshPage();
+        onDataChanged?.();
       }
 
     }

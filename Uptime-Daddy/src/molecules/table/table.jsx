@@ -2,8 +2,8 @@ import { useState, useEffect } 				from "react";
 import 										"./style.css";
 import { Table, Label, Icon } 				from "semantic-ui-react";
 import MonitorModal 						from "../monitorModal/index.jsx";
-import { API_URL } 							from "../../util/api.jsx";
-import { getAuthPayload, getAuthHeaders} 	from "../../util/auth";
+import { API_URL, fetchCall } 				from "../../util/api.jsx";
+import { getAuthPayload } 					from "../../util/auth";
 import accents 								from "../../util/status/stautsAccent.jsx";
 import Loader 								from "../../atoms/loader/loader.jsx";
 
@@ -19,22 +19,11 @@ function TableComponent({ refreshSignal = 0, onDataChanged }) {
 		setLoading(true);
 
 		try {
-			const response = await fetch(`${API_URL}/Websites/user/${userId}/with-measurements`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					...getAuthHeaders(),
-				},
+			const data = await fetchCall({
+				url: `${API_URL}/Websites/user/${userId}/with-measurements`,
 			});
 
-			const data = await response.json();
 			setWebsiteData(Array.isArray(data) ? data : []);
-
-			if (!response.ok) {
-				throw new Error(
-					`Request failed with status ${response.status}`,
-				);
-			}
 
 		} catch (error) {
 			console.error("Error fetching account data:", error);
