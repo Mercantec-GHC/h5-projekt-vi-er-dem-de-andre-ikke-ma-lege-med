@@ -1,9 +1,33 @@
-# template
-Empty Template
+---
 
-Mathias yapper altid
-## Architecture
+##  Rapport
 
-This project follows the atomic design pattern for file structure, though not every atomic design layer is fully implemented.
+-  [Projekt rapport (PDF)](rapport.pdf)
 
-- Reference: [Atomic Design chapter 2](https://atomicdesign.bradfrost.com/chapter-2/)
+---
+
+##  Repository
+
+-  GitHub repo: https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med
+
+---
+
+##  Opstarts guide
+
+Projektet kan startes på to måder:
+
+---
+
+### Kør med Docker
+
+Sørg for at du har Docker installeret.
+
+```bash
+docker build -t h5-projekt .
+docker run -p 5173:5173 h5-projekt
+```
+Alternativt 
+```bash
+npm i
+npm run dev
+```
