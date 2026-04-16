@@ -2,13 +2,16 @@
 
 ##  Rapport
 
--  [Projekt rapport (PDF)](rapport.pdf)
+  [Projekt rapport (PDF)](rapport.pdf)
 
 ---
 
 ##  Repository
 
--  GitHub repo: https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med
+APP repo: [https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med](https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med/)
+Accounts repo: [https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med](https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med-account-service)
+API repo: [https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med](https://github.com/Mercantec-GHC/H5-Projekt-dem-vi-andre-ikke-m--lege-med-Backend)
+IoT repo: [https://github.com/Mercantec-GHC/h5-projekt-vi-er-dem-de-andre-ikke-ma-lege-med](https://github.com/Mercantec-GHC/H5_Http_requester_pi)
 
 ---
 
